@@ -1,0 +1,273 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+
+int NUM_ELEMENTS = 1000;
+
+int FindNumOf0s(vector<int> &input, int placeNum){
+    int num0 = 0;
+    int divisor = 10^(11 - placeNum);
+    int total = 0;
+    for (int i =0; i < (input.size() -1) ; i++ ){
+        int currNum = input.at(i);
+        int currDigit = currNum % 10;
+        total += currDigit;
+
+        input.at(i) = input.at(i)/10;
+
+
+    }
+    //cout << "the total is " << total << endl;
+    return total;
+}
+
+void PrintVect(vector<int> theVect){
+    for (int i=0; i < theVect.size(); i++){
+        cout << theVect.at(i);
+    }
+}
+
+int GetPositionTotal(vector<string> &theInput, int pos){
+    int total = 0;
+    for (int i = 0; i < 1000; i++){
+        string firstSection = theInput.at(i).substr(pos, 1);
+        int num1;
+        num1 = stoi(firstSection);
+        total += num1;
+    }
+    return total;
+}
+
+string GetMostPopular(vector<string>theBinarys, int pos){
+    int totalNumOf1s = 0;
+    int numValidElements = theBinarys.size();
+
+    for (int i = 0; i < theBinarys.size(); i++){
+        string firstSection = theBinarys.at(i).substr(pos, 1);
+        //int num1;
+        //num1 = stoi(firstSection);
+        //
+        if (firstSection == "R"){
+
+            numValidElements = numValidElements - 1;
+        }
+
+        if (firstSection == "1"){
+            totalNumOf1s +=1;
+        }
+    }
+
+    if (static_cast<double>(totalNumOf1s) >= ( static_cast<double>(numValidElements / 2.0) ) ){
+        return "1";
+    } else {
+        return "0";
+    }
+}
+
+string GetLeastPopular(vector<string>theBinarys, int pos){
+    int totalNumOf1s = 0;
+    int numValidElements = theBinarys.size();
+
+    for (int i = 0; i < theBinarys.size(); i++){
+        string firstSection = theBinarys.at(i).substr(pos, 1);
+        //int num1;
+        //num1 = stoi(firstSection);
+        //
+        if (firstSection == "R"){
+
+            numValidElements = numValidElements - 1;
+        }
+
+        if (firstSection == "1"){
+            totalNumOf1s +=1;
+        }
+    }
+
+    if (static_cast<double>(totalNumOf1s) >= ( static_cast<double>(numValidElements / 2.0) ) ){
+        return "0";
+    } else {
+        return "1";
+    }
+}
+vector<string> FilterVector(vector<string> currVector, int pos, int correctNum, int sizeOfNew){
+    vector<string> newVector(sizeOfNew);
+    for (int i =0; i < currVector.size(); i++){
+        string firstSection = currVector.at(i).substr(pos, 1);
+        if (stoi(firstSection) == correctNum){
+            newVector.push_back( currVector.at(i));
+        }
+
+    }
+    return newVector;
+}
+vector<string> FindNewVector(vector<string> theVector, int pos){
+    int total = 0;
+    int mostPopular;
+    //figure out which is most popular
+    for (int i = 0; i < theVector.size(); i++){
+        string firstSection = theVector.at(i).substr(pos, 1);
+        int num1;
+        num1 = stoi(firstSection);
+        total += num1;
+    }
+
+    if (total >= (theVector.size() / 2) ){ //if the most popular is 1
+        mostPopular = 1;
+        vector<string> newVector(total);
+        for (int i = 0; i < newVector.size(); i++){
+            string firstSection = theVector.at(i).substr(pos, 1);
+            if ( stoi(firstSection) == 1){
+                newVector.push_back( theVector.at(i));
+            }
+        }
+        return newVector;
+
+    } else { //if the most popular is 0
+        mostPopular = 0;
+        vector<string> newVector( theVector.size() -  total);
+        for (int i = 0; i < newVector.size(); i++){
+            string firstSection = theVector.at(i).substr(pos, 1);
+            if ( stoi(firstSection) == 0){
+                newVector.push_back( theVector.at(i));
+            }
+        }
+        return newVector;
+    }
+
+}
+vector<string> ReadTheInput(){
+    vector<string> theInput(NUM_ELEMENTS);
+    ifstream inFS;
+    // Open file
+    inFS.open("PuzzleInput.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < NUM_ELEMENTS; j++) {
+        string currStr;
+        getline(inFS, currStr, '\n'  ); //
+        theInput.at(j) = currStr;
+    }
+
+    inFS.close();
+
+    return theInput;
+
+
+}
+
+void DeleteBadEls(vector<string> &vectOfInput, string goodNum, int pos){
+    for (int i =0; i < vectOfInput.size(); i++){
+        string firstSection = vectOfInput.at(i).substr(pos, 1);
+        if (firstSection != goodNum){
+            vectOfInput.at(i) = "RRRRRRRRRRRRR";
+        }
+    }
+}
+
+
+
+void DeleteBadEls2(vector<string> &vectOfInput2, string goodNum, int pos){
+    for (int i =0; i < vectOfInput2.size(); i++){
+        string firstSection = vectOfInput2.at(i).substr(pos, 1);
+        if (firstSection != goodNum){
+            vectOfInput2.at(i) = "RRRRRRRRRRRRR";
+        }
+    }
+}
+
+
+
+
+bool CheckIfFinished(vector<string> vectOfInput){
+    int total =0;
+    string answer1;
+    for (int i = 0; i < vectOfInput.size(); i++){
+        if (vectOfInput.at(i) != "RRRRRRRRRRRRR"){
+            total +=1;
+            answer1 = vectOfInput.at(i);
+        }
+    }
+    if (total == 1){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+string GetAnswer(vector<string> theVect){
+    for (int i = 0; i < theVect.size(); i++){
+        if (theVect.at(i) != "RRRRRRRRRRRRR"){
+            string answer1 = theVect.at(i);
+            return answer1;
+        }
+    }
+
+}
+
+int main() {
+    vector<string> vectOfInput = ReadTheInput();
+    vector<string> vectOfInput2 = ReadTheInput();
+
+    bool keepGoing = true;
+    int i = 0;
+    do {
+        string mostCommon = GetMostPopular(vectOfInput, i);
+        DeleteBadEls(vectOfInput, mostCommon, i);
+        keepGoing = CheckIfFinished(vectOfInput);
+        i++;
+    }while(keepGoing);
+
+
+    cout << "Oxygen Reading " << GetAnswer(vectOfInput) << endl;
+    //cout << "The correct Oxygen Reading " << 10111 << endl;
+
+
+    bool keepGoing2 = true;
+    int q = 0;
+    do {
+        string leastCommon = GetLeastPopular(vectOfInput2, q);
+        DeleteBadEls2(vectOfInput2, leastCommon, q);
+        keepGoing2 = CheckIfFinished(vectOfInput2);
+        q++;
+    }while(keepGoing2);
+
+    cout << "C02 Scrubber Reading " << GetAnswer(vectOfInput2) << endl;
+    //cout << "The correct C02 Scrubber Reading " << "01010" << endl;
+
+
+
+/*
+    for (int i = 0; i < 12; i++){
+        string mostCommon = GetLeastPopular(vectOfInput2, i);
+        DeleteBadEls2(vectOfInput2, mostCommon, i);
+    }
+
+    for (int i = 0; i < vectOfInput.size(); i++){
+        if (vectOfInput2.at(i) != "thisIsntTheAnswer"){
+            string answer2 = vectOfInput.at(i);
+            cout << answer2;
+        }
+    }
+*/
+
+    //001110100100 - 1594 most common
+
+    //011000111010
+
+    //most recent **011000111010
+
+    //111000110111
+    /*
+     * 011000111010
+    *100000010010
+     */
+    return 0;
+}
