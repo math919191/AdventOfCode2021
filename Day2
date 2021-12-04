@@ -1,0 +1,80 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+
+int NUM_ELEMENTS = 1000;
+
+vector<string> ReadTheInput(){
+    vector<string> theInput(NUM_ELEMENTS);
+    ifstream inFS;
+    // Open file
+    inFS.open("PuzzleInput.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < NUM_ELEMENTS; j++) {
+        string currStr;
+        getline(inFS, currStr, '\n'  ); //
+        theInput.at(j) = currStr;
+    }
+
+    inFS.close();
+
+    return theInput;
+
+
+}
+
+int main() {
+    vector<string> myInput = ReadTheInput();
+
+    int distance;
+    int vertical = 0;
+    int horiz = 0;
+    int aim = 0;
+
+    for (int z = 0; z < NUM_ELEMENTS; z++) {
+
+
+        string myString = myInput.at(z);
+        distance = stoi(myString.substr( (myString.length() - 1), 1) );
+        string direction = myString.substr(0, 1);
+
+        if (direction == "u") {
+            aim -= distance;
+
+        } else if (direction == "d") {
+            aim += distance;
+
+        } else if (direction == "f") {
+            horiz += distance;
+            vertical += aim*distance;
+
+        } else if (direction == "b") {
+            horiz -= distance;
+        }
+
+
+        /*cout << myString << endl;
+        cout << "horiz distance is "<< distance << endl;
+        cout << "vert distance is "<< distance << endl;
+        cout << endl;
+*/
+
+    }
+    cout << "horiz distance is "<< horiz << endl;
+    cout << "vert distance is "<< vertical << endl;
+    cout << "the answer is " << horiz * vertical << endl;
+
+
+
+
+    return 0;
+}
