@@ -1,0 +1,179 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+
+int NUM_ELEMENTS = 5000;
+int NUM_BOARDS = 100;
+
+vector<string> ReadTheInput(){
+    vector<string> theInput(NUM_ELEMENTS);
+    ifstream inFS;
+    // Open file
+    inFS.open("PuzzleInput.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < NUM_ELEMENTS; j++) {
+        string currStr;
+        //getline(inFS, currStr, '\n'  );
+        inFS >> currStr;
+
+        theInput.at(j) = currStr;
+    }
+
+    inFS.close();
+
+    return theInput;
+
+}
+
+void Print2DVector(vector<vector<int>> vect ){
+    for (int i = 0; i < vect.size(); i++)
+    {
+        for (int j = 0; j < vect[i].size(); j++)
+        {
+            cout << vect[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+}
+
+vector<vector<vector<int>>> ArrangeInput(vector<string> &myInput){
+    //I have groups of 25 that need to be in rows of 5 by 5
+    vector<vector<vector<int>>> myBingoBoards;
+    int currCounter = 0;
+    for (int k=0; k < NUM_BOARDS; k++) {
+        vector<vector<int>> bingoBoard;
+        for (int j = 0; j < 5; j++) {
+            vector<int> row(5);
+            for (int i = 0; i < 5; i++) {
+                row.at(i) = stoi( myInput.at(currCounter) );
+                currCounter++;
+            }
+            bingoBoard.push_back(row);
+        }
+        myBingoBoards.push_back(bingoBoard);
+    }
+    return myBingoBoards;
+}
+
+void CallNumber(int numCalled, vector<vector<vector<int>>> &myBoards ){
+    for (int k =0; k < myBoards.size(); k++) {
+        for (int j = 0; j < 5; j++) {
+            for (int i = 0; i < 5; i++) {
+                int currVal = myBoards[k][j][i];
+                if (myBoards[k][j][i] == numCalled){
+                    myBoards[k][j][i] = 111; //MEANS MARKED
+                }
+            }
+        }
+    }
+} //marks any number that matches as 111
+
+int FindBoardTotal(vector<vector<int>> winningBoard) {
+    int total = 0;
+
+    for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < 5; i++){
+            if (winningBoard[j][i] != 111) {
+                total += winningBoard[j][i];
+            }
+        }
+    }
+    return total;
+}
+
+
+int ChecksForWinnerRows(vector<vector<vector<int>>> &myBoards){
+    for (int k =0; k < myBoards.size(); k++) {
+        for (int j = 0; j < 5; j++) {
+            int winCounter = 0;
+            for (int i = 0; i < 5; i++) {
+                int currVal = myBoards[k][j][i];
+                if (currVal == 111){
+                    winCounter +=1;
+                }
+            }
+            if (winCounter == 5){
+                return FindBoardTotal(myBoards.at(k));
+            }
+
+        }
+    }
+    return 0;
+}
+
+int ChecksForWinnerColumns(vector<vector<vector<int>>> &myBoards){
+    for (int k =0; k < myBoards.size(); k++) {
+        for (int j = 0; j < 5; j++) {
+            int winCounter = 0;
+            for (int i = 0; i < 5; i++) {
+                int currVal = myBoards[k][i][j]; //swapped i and j so the column # stays the same
+                if (currVal == 111){
+                    winCounter +=1;
+                }
+            }
+            if (winCounter == 5){
+                return FindBoardTotal(myBoards.at(k));
+            }
+
+        }
+    }
+    return 0;
+}
+
+int WinnerCheck(vector<vector<vector<int>>> &myBoards){
+    int colTotal = ChecksForWinnerColumns(myBoards);
+    int rowTotal = ChecksForWinnerRows(myBoards);
+    if (colTotal != 0){
+        return colTotal;
+    } else if (rowTotal != 0){
+        return rowTotal;
+    } else {
+        return 0;
+    }
+
+}
+
+int main() {
+    //vector<int> numbersCalled {7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1};
+    vector<int> numbersCalled {79,9,13,43,53,51,40,47,56,27,0,14,33,60,61,36,72,48,83,42,10,86,41,75,16,80,15,93,95,45,68,96,84,11,85,63,18,31,35,74,71,91,39,88,55,6,21,12,58,29,69,37,44,98,89,78,17,64,59,76,54,30,65,82,28,50,32,77,66,24,1,70,92,23,8,49,38,73,94,26,22,34,97,25,87,19,57,7,2,3,46,67,90,62,20,5,52,99,81,4
+    };
+    vector<string> myInput = ReadTheInput();
+    vector<vector<vector<int>>> myBoards;
+    myBoards = ArrangeInput(myInput);
+
+    bool keepGoing = true;
+    int counter = 0;
+    int totalAnswer;
+    do {
+        CallNumber(numbersCalled.at(counter), myBoards);
+        int winner = WinnerCheck(myBoards);
+        if (  winner != 0){
+            cout << "Most recent call is" << numbersCalled.at(counter) << endl;
+            cout << "The total of the board is " << winner << endl;
+            cout << "The answer is " << winner * numbersCalled.at(counter) << endl;
+            keepGoing = false;
+        }
+        counter ++;
+    }while(keepGoing);
+
+
+
+
+
+    cout << "the answer is " << "correct!" << endl;
+
+
+
+
+    return 0;
+}
