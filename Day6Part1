@@ -1,0 +1,138 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+
+//int const NUM_ELEMENTS = 300;
+int const NUM_ELEMENTS = 5;
+
+
+vector<int> ReadTheInput(){
+    vector<int> theInput(NUM_ELEMENTS);
+    ifstream inFS;
+    // Open file
+    inFS.open("input.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < NUM_ELEMENTS; j++) {
+        string currStr;
+        getline(inFS, currStr, ','  );
+
+        //getline(inFS, currStr, '\n'  );
+        //inFS >> currStr;
+
+        theInput.at(j) = stoi(currStr);//TODO change for other problems
+    }
+
+    inFS.close();
+
+    return theInput;
+
+}
+
+class Fish{
+public:
+    Fish(int daysLeft);
+    int GetDaysLeft();
+    int GetCycleNum();
+    void ToString();
+    void DayPasses();
+    void SpawnNewFish();
+    bool NeedToSpawn();
+    void IncreaseCycle();
+    void SetDaysLeft(int userDays);
+
+private:
+    int days;
+    int cycleNum;
+
+};
+Fish::Fish(int daysLeft){
+    days = daysLeft;
+    cycleNum = 0;
+}
+int Fish::GetDaysLeft() {
+    return days;
+}
+int Fish::GetCycleNum() {
+    return cycleNum;
+}
+void Fish::ToString() {
+    cout << "this fish has " << days << endl;
+}
+void Fish::DayPasses(){
+    days -=1;
+}
+void Fish::IncreaseCycle(){
+    cycleNum +=1;
+}
+void Fish::SpawnNewFish(){
+}
+void Fish::SetDaysLeft(int userDays){
+    days = userDays;
+}
+bool Fish::NeedToSpawn(){
+    if (days == 0){
+        return true;
+    } else{
+        return false;
+    }
+}
+void PrintFishDays(vector<Fish> &fishies){
+    for (int i =0; i < fishies.size(); i++){
+        cout << fishies.at(i).GetDaysLeft() << ", ";
+    }
+
+}
+
+int main() {
+    const int DAYS_PASSED = 256;
+    vector<int> input = ReadTheInput();
+    vector<int> numFishPerDay;
+    vector<Fish> fishies;
+
+    //start by creating fish from input
+    for (int i = 0; i < input.size(); i++){
+        fishies.push_back( Fish(input.at(i)) );
+    }
+    numFishPerDay.push_back( fishies.size() ); // add the first day
+
+    for (int q = 0; q < DAYS_PASSED; q++){ //simulate a day passing
+        int newSize = fishies.size();
+        int newFish = 0;
+        for (int i = 0; i < newSize; i++) {
+            fishies.at(i).DayPasses();
+            if (fishies.at(i).GetDaysLeft() == -1) {
+                fishies.at(i).IncreaseCycle();
+                fishies.at(i).SetDaysLeft(6);
+                fishies.push_back(Fish(8));
+                newFish+=1;
+            }
+        }
+        numFishPerDay.push_back( newFish );
+
+        //cout << "After " << (q + 1) << " days, there are " << fishies.size() << " fishies" << endl;
+        //PrintFishDays(fishies);
+        //cout << endl;
+
+    }
+    int totalFish = 0;
+
+    for (int i = 0; i < numFishPerDay.size(); i++){
+        totalFish += numFishPerDay.at(i);
+    }
+
+    //cout << "After " << DAYS_PASSED << " days, there are " << fishies.size() << " fishies" << endl;
+    cout << "After " << DAYS_PASSED << " days, there are " << totalFish << " fishies" << endl;
+
+    return 0;
+}
+
+
