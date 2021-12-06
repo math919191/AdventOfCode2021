@@ -1,0 +1,216 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+
+unsigned int const NUM_ELEMENTS = 300;
+//unsigned int const NUM_ELEMENTS = 5;
+
+
+vector<int> ReadTheInput(){
+    vector<int> theInput(NUM_ELEMENTS);
+    ifstream inFS;
+    // Open file
+    inFS.open("realinput2.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < NUM_ELEMENTS; j++) {
+        string currStr;
+        getline(inFS, currStr, ','  );
+
+        //getline(inFS, currStr, '\n'  );
+        //inFS >> currStr;
+
+        theInput.at(j) = stoi(currStr);//TODO change for other problems
+    }
+
+    inFS.close();
+
+    return theInput;
+
+}
+
+
+class DayAndFish{
+public:
+    DayAndFish(unsigned long long int userDaysLeftNumber, unsigned long long int userNumFish);
+    void ToString();
+
+    unsigned int GetDaysLeft();
+
+    unsigned long long int GetNumFish();
+
+    void SetDaysLeft(unsigned long long int givenDaysLeftNumber);
+
+    void SetNumFish(unsigned long long int givenNumFish);
+
+private:
+    unsigned int daysLeftNumber;
+    unsigned long long int numFish;
+
+
+};
+
+DayAndFish::DayAndFish(unsigned long long int userDaysLeftNumber, unsigned long long int userNumFish){
+    daysLeftNumber = userDaysLeftNumber;
+    numFish = userNumFish;
+};
+
+unsigned int DayAndFish::GetDaysLeft(){
+    return daysLeftNumber;
+}
+unsigned long long int DayAndFish::GetNumFish(){
+    return numFish;
+}
+void DayAndFish::SetDaysLeft(unsigned long long int givenDaysLeftNumber){
+    daysLeftNumber = givenDaysLeftNumber;
+}
+void DayAndFish::SetNumFish(unsigned long long int givenNumFish){
+    numFish = givenNumFish;
+}
+void DayAndFish::ToString(){
+    cout << "There are " << numFish << " that have " << daysLeftNumber << " left." <<endl;
+}
+void PrintAllDayAndFish(vector<DayAndFish> &daysAndFishies){
+
+    for (unsigned int i =0; i < daysAndFishies.size(); i++){
+        daysAndFishies.at(i).ToString();
+    }
+
+}
+
+unsigned long long int GetTotalFish(vector<DayAndFish> &daysAndFishies){
+    unsigned long long int total = 0;
+    for (unsigned int i = 0; i < daysAndFishies.size(); i++){
+        if (i != 0){ //don't include the -1 fish
+            total += daysAndFishies.at(i).GetNumFish();
+        }
+    }
+    return total;
+}
+
+void PrintTotalFish(vector<DayAndFish> &daysAndFishies){
+    unsigned long long int total = 0;
+    for (unsigned int i = 0; i < daysAndFishies.size(); i++){
+        if (i != 0){ //don't include the -1 fish
+            cout << daysAndFishies.at(i).GetNumFish() << "+";
+        }
+
+    }
+
+}
+
+
+int main() {
+    const unsigned int DAYS_PASSED = 256;
+    vector<int> input = ReadTheInput();
+    vector<int> numFishPerDay;
+    vector<int> fishiesDaysLeft;
+    vector<DayAndFish> daysAndFishies;
+
+    //Create the initial numbers
+    for (int i = -1; i < 9; i++){
+        cout << i << ",";
+        unsigned int numOfNumber = 0;
+
+        for (unsigned int q = 0; q < NUM_ELEMENTS; q++){
+            if (input.at(q) == i){
+                numOfNumber +=1;
+            }
+        }
+        daysAndFishies.push_back( DayAndFish(i, numOfNumber) );
+    }
+
+    PrintAllDayAndFish(daysAndFishies);
+
+    unsigned long long int daSpecialFish;
+    for (unsigned int q = 0; q < (DAYS_PASSED); q++) { //simulate a day passing
+        //cout << "new day " << endl;
+        //Move everything down one
+        for (unsigned int i = 1; i < (daysAndFishies.size()); i++){ //shift all the other ones down
+            //daysAndFishies.at(i).ToString();
+            unsigned long long int currDayNumOfFish = daysAndFishies.at(i).GetNumFish();
+            daysAndFishies.at(i - 1).SetNumFish(currDayNumOfFish);
+            //daysAndFishies.at(i).ToString();
+            //daysAndFishies.at(i - 1).ToString();
+        }
+
+        //set 8 to after moving 7 down
+        daysAndFishies.at(9).SetNumFish(0);
+
+
+
+
+        //Add da Special Fish -- spawns the new fish
+        daSpecialFish = daysAndFishies.at(0).GetNumFish();
+
+        unsigned long long int currFishNumDay8 = daysAndFishies.at(9).GetNumFish();
+        daysAndFishies.at(9).SetNumFish(  currFishNumDay8 + daSpecialFish);
+
+        unsigned long long int currFishNumDay6 = daysAndFishies.at(7).GetNumFish();
+        daysAndFishies.at(7).SetNumFish(  currFishNumDay6 + daSpecialFish);
+
+        //PrintAllDayAndFish(daysAndFishies);
+
+    }
+
+    PrintAllDayAndFish(daysAndFishies);
+
+    //Find the total number of fish
+    cout << "After " << DAYS_PASSED << " there are " << GetTotalFish(daysAndFishies) << endl;
+
+    PrintTotalFish(daysAndFishies);
+
+
+    /*
+        //start by creating fish from input
+    for (unsigned int i = 0; i < input.size(); i++){
+        //fishies.push_back( Fish(input.at(i)) );
+        fishiesDaysLeft.push_back( input.at(i)  );
+    }
+    //numFishPerDay.push_back( fishies.size() ); // add the first day
+    numFishPerDay.push_back( fishiesDaysLeft.size() ); // add the first day
+
+    for (unsigned int q = 0; q < DAYS_PASSED; q++){ //simulate a day passing
+        unsigned int newSize = fishiesDaysLeft.size();
+        unsigned int newFish = 0;
+
+        for (unsigned int i = 0; i < newSize; i++) {
+            fishiesDaysLeft.at(i) = fishiesDaysLeft.at(i) - 1;
+            if (fishiesDaysLeft.at(i) == - 1){
+                fishiesDaysLeft.at(i) = (6);
+                fishiesDaysLeft.push_back(8);
+                newFish+=1;
+            }
+        }
+
+        numFishPerDay.push_back( newFish );
+
+    }
+
+
+
+
+    long long totalFish = 0;
+    for (unsigned int i = 0; i < numFishPerDay.size(); i++){
+        totalFish += numFishPerDay.at(i);
+    }
+    //cout << "After " << DAYS_PASSED << " days, there are " << fishies.size() << " fishies" << endl;
+    cout << "After " << DAYS_PASSED << " days, there are " << totalFish << " fishies" << endl;
+    */
+
+    // too low 22430230895
+    // too low 26984457539 -- other puzzle answer
+    // too low 25676440560
+    // too low 1705008653296
+    return 0;
+}
+
+
