@@ -1,0 +1,92 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+
+const int INPUT_SIZE = 1000;
+vector<string> ReadTheInput(){
+    vector<string> theInput(INPUT_SIZE);
+    ifstream inFS;
+    // Open file
+    inFS.open("input.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < INPUT_SIZE; j++) {
+        string currStr;
+        getline(inFS, currStr, ','  );
+        //inFS >> currStr;
+
+        theInput.at(j) = currStr;
+
+    }
+
+
+    inFS.close();
+
+    return theInput;
+
+}
+
+
+int FindFuel(int finalLoc, vector<int> crabLocation){
+    int totalDist = 0;
+    for (int i =0; i < crabLocation.size(); i++){
+        
+        
+        
+        totalDist += fabs( finalLoc - crabLocation.at(i) );
+
+    }
+    return totalDist;
+
+}
+
+
+int main() {
+    vector<string> input = ReadTheInput();
+    vector<int> listOfPos;
+
+    int max = stoi(input.at(0));
+    int min = stoi(input.at(0));
+    for (int i = 0; i < input.size(); i++){
+        int currNum = stoi ( input.at(i) );
+        listOfPos.push_back(   currNum );
+
+        if (currNum > max){
+            max = currNum;
+        } else if (currNum < min){
+            min = currNum;
+        }
+    }
+
+    vector<int> finalFuels;
+    vector<int> finalLoc;
+    for (int i = min; i <= max; i++){
+
+        int fuel = FindFuel(i, listOfPos);
+        finalFuels.push_back(fuel);
+        finalLoc.push_back(i);
+    }
+    int minFuel = finalFuels.at(0);
+    int minFuelPos = 0;
+    for (int i = 0; i < finalFuels.size(); i++){
+        if (finalFuels.at(i) < minFuel){
+            minFuel = finalFuels.at(i);
+            minFuelPos = 0;
+        }
+    }
+    cout << "At pos " << finalLoc.at( minFuelPos ) << " the fuel totals to " << minFuel << endl;
+
+
+    cout << FindFuel(2, listOfPos);
+    return 0;
+}
+
+
