@@ -1,0 +1,317 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+
+const int BOARD_SIZE = 1000; // 1000
+const int INPUT_SIZE = 200; // 200
+vector<string> ReadTheInput(){
+    vector<string> theInput(INPUT_SIZE);
+    ifstream inFS;
+    // Open filer
+    inFS.open("input.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < INPUT_SIZE; j++) {
+        string currStr;
+
+        getline(inFS, currStr, '\n'  );
+        //inFS >> currStr;
+        theInput.at(j) = currStr;
+
+    }
+
+
+    inFS.close();
+
+    return theInput;
+
+}
+
+int GiveOriginalIntBack(char theChar){
+    if (theChar == 'a'){
+        return 0;
+    } else if (theChar == 'b'){
+        return 1;
+    } else if (theChar == 'c'){
+        return 2;
+    }else if (theChar == 'd'){
+        return 3;
+    }else if (theChar == 'e'){
+        return 4;
+    }else if (theChar == 'f'){
+        return 5;
+    }else if (theChar == 'g') {
+        return 6;
+    }
+
+}
+
+bool FindIfLetterIsThere(string digit, char fakeLetter, vector<char> key){
+
+    char letterSearching = key.at( GiveOriginalIntBack(fakeLetter) );
+
+    for (int i = 0; i < digit.size(); i++){
+        if (digit.at(i) == letterSearching){
+            return true;
+        }
+    }
+    return false;
+
+}
+
+int GivesRealDigit(string digitStr, vector<char> key){
+    // index #     0 1 2 3 4 5 6
+    // real output a b c d e f g
+    int size = digitStr.size();
+    if (size == 2){
+        return 1;
+    } else if (size == 4){
+        return 4;
+    } else if (size == 3){
+        return 7;
+    } else if (size == 7){
+        return 8;
+    } else if (size == 6){ // either 0 or 6 or 9
+        if ( FindIfLetterIsThere( digitStr, 'e', key) != true  ){
+            return 9;
+        } else if (FindIfLetterIsThere( digitStr, 'c', key) != true){
+            return 6;
+        } else if (FindIfLetterIsThere( digitStr, 'd', key) != true){
+            return 0;
+        }
+    } else if (size == 5){ //either 2 or 3 or 5
+        if (FindIfLetterIsThere( digitStr, 'f', key) != true){
+            return 2;
+        } else if (FindIfLetterIsThere( digitStr, 'b', key) != true){
+            return 3;
+        } else {
+            return 5;
+        }
+    }
+
+
+}
+
+vector<int> FindLetterCount(vector<string> lineOfDigits) {
+    vector<int> countOfEachLetter(7);
+    for (int i = 0; i < 10; i++) { //all the characters
+        string currDigit = lineOfDigits.at(i);
+        for (int j = 0; j < currDigit.length(); j++) {
+            char currCharacter = currDigit.at(j);
+            if (currCharacter == 'a') {
+                countOfEachLetter.at(0) = countOfEachLetter.at(0) + 1;
+            } else if (currCharacter == 'b') {
+                countOfEachLetter.at(1) = countOfEachLetter.at(1) + 1;
+            } else if (currCharacter == 'c') {
+                countOfEachLetter.at(2) = countOfEachLetter.at(2) + 1;
+            } else if (currCharacter == 'd') {
+                countOfEachLetter.at(3) = countOfEachLetter.at(3) + 1;
+            } else if (currCharacter == 'e') {
+                countOfEachLetter.at(4) = countOfEachLetter.at(4) + 1;
+            } else if (currCharacter == 'f') {
+                countOfEachLetter.at(5) = countOfEachLetter.at(5) + 1;
+            } else if (currCharacter == 'g') {
+                countOfEachLetter.at(6) = countOfEachLetter.at(6) + 1;
+            }
+        }
+
+    }
+    return countOfEachLetter;
+}
+
+char GiveOriginalCharacterBack(int num){
+    if (num == 0){
+        return 'a';
+    } else if (num == 1){
+        return 'b';
+    } else if (num == 2){
+        return 'c';
+    }else if (num == 3){
+        return 'd';
+    }else if (num == 4){
+        return 'e';
+    }else if (num == 5){
+        return 'f';
+    }else if (num == 6) {
+        return 'g';
+    }
+
+}
+
+string GetTheDigitBasedOnLength(vector<string> lineOfDigits, int desiredLength){
+    for (int i = 0; i < 10; i++){
+        string currDig = lineOfDigits.at(i);
+        if (currDig.length() == desiredLength){
+            return currDig;
+        }
+    }
+}
+
+vector<char> FindAnswerKey(vector<string> lineOfDigits){
+    vector<char> myAnswerKey(7);
+    vector<char> possibleGs;
+
+    // index #     0 1 2 3 4 5 6
+    // real output a b c d e f g
+    // example     b d a e g c f
+
+    vector<int> eachLetterCount;
+    eachLetterCount = FindLetterCount(lineOfDigits);
+
+    for (int i =0; i < eachLetterCount.size(); i++){
+        int currCount = eachLetterCount.at(i);
+        if (currCount == 9){ //that's my F!
+            myAnswerKey.at(5) = GiveOriginalCharacterBack(i);
+        } else if (currCount == 4){ //that's my E!
+            myAnswerKey.at(4) = GiveOriginalCharacterBack(i);
+        } else if (currCount == 6){ //that's my B!
+            myAnswerKey.at(1) = GiveOriginalCharacterBack(i);
+        } else if (currCount == 7){ //possible G
+            char possibleG = GiveOriginalCharacterBack(i);
+            //cout << possibleG;
+            possibleGs.push_back(possibleG);
+        }
+    }
+
+    //Find C
+    string myOne = GetTheDigitBasedOnLength(lineOfDigits, 2);
+    if (myOne.at(0) == myAnswerKey.at(5)){ //whatever one isn't f.
+        myAnswerKey.at(2) = myOne.at(1); //that's my c!
+    } else {
+        myAnswerKey.at(2) = myOne.at(0); //that's my c!
+    }
+
+    char myF = myAnswerKey.at(5);
+    char myC = myAnswerKey.at(2);
+
+
+    //Find A
+
+    string mySeven = GetTheDigitBasedOnLength(lineOfDigits, 3);
+    if ( ( mySeven.at(0) )!= myF && ( mySeven.at(0) != myC )  ){ //whatever one isn't f or c.
+        myAnswerKey.at(0) = mySeven.at(0); //that's my a!
+    } else if ( ( mySeven.at(1) != myF  ) && ( mySeven.at(1) != myC ) ) {
+        myAnswerKey.at(0) = mySeven.at(1); //that's my a!
+    } else {
+        myAnswerKey.at(0) = mySeven.at(2); //that's my a!
+    }
+
+    //Find D
+    // | (b)   |
+    // | __ (d)| (c)
+    //         | (f)
+    string myFour = GetTheDigitBasedOnLength(lineOfDigits, 4); //which ever one isn't f or c or b
+    char myA = myAnswerKey.at(0);
+    char myB = myAnswerKey.at(1);
+    myF = myAnswerKey.at(5);
+    myC = myAnswerKey.at(2);
+
+
+    if (    (myFour.at(0) != myB) && (myFour.at(0) != myC) && (myFour.at(0) != myF) ){
+        myAnswerKey.at(3) = myFour.at(0);
+    } else if (    (myFour.at(1) != myB) && (myFour.at(1) != myC) && (myFour.at(1) != myF) ){
+            myAnswerKey.at(3) = myFour.at(1);
+    } else if (    (myFour.at(2) != myB) && (myFour.at(2) != myC) && (myFour.at(2) != myF) ){
+        myAnswerKey.at(3) = myFour.at(2);
+    } else {
+        myAnswerKey.at(3) = myFour.at(3);
+    }
+
+    //Find G -- last man standing
+    char myD = myAnswerKey.at(3);
+    //cout << possibleGs.at(1);
+    if (possibleGs.at(0) == myD){
+        myAnswerKey.at(6) = possibleGs.at(1);
+    } else {
+        myAnswerKey.at(6) = possibleGs.at(0);
+    }
+
+
+    /*string myEight = GetTheDigitBasedOnLength(lineOfDigits, 7); //which ever one isn't f or c or a
+    vector<char> charVect {'a', 'b','c','d','e','f','g'};
+    for (int i =0; i < 7; i++){
+        char currChar = charVect.at(i);
+        if (myEight.find(currChar) == string::npos)myAnswerKey.at(6) == currChar;
+    }
+     */
+    return myAnswerKey;
+
+
+}
+
+
+int main() {
+    vector<string> input = ReadTheInput();
+    vector<char> answerKey;
+    vector<vector<string>> inputCheck;
+    vector<vector<string>> digitsCheck;
+    vector<int> answerCheck;
+    int total = 0;
+    // index #     0 1 2 3 4 5 6
+    // real output a b c d e f g
+    // example     b d a e g c f
+
+
+    //gets the digits
+    for (int i =0; i < input.size(); i++){
+        int hi = 0;
+        vector<string> digits;
+        string currInput = input.at(i);
+        for (int q =0; q < 10; q++) {
+            string currSubString;
+            int pos = currInput.find(" ", 1);
+            currSubString = currInput.substr(0, pos);
+            digits.push_back(currSubString);
+            currInput.erase(0, pos + 1);
+        }
+        inputCheck.push_back(digits);
+
+        answerKey = FindAnswerKey(digits);
+
+        currInput.erase(0,2);
+        int smallTotal = 0;
+
+        vector<string> fourDigits;
+        for (int j =0; j < 4; j++){
+            string currdigit;
+            int pos = currInput.find(" ", 1);
+            currdigit = currInput.substr(0, pos);
+
+            int myDig =  GivesRealDigit(currdigit, answerKey);
+
+            fourDigits.push_back(currdigit);
+            int mult = pow (10, 3 - j); //10 ^ (3-j);
+            //cout << " mult " << mult << endl;
+            //total += (myDig * mult);
+            smallTotal += (myDig * mult);
+            //cout << smallTotal << endl;
+            currInput.erase(0, pos + 1);
+            //cout << currdigit << " ";
+            //cout << smallTotal;
+
+        }
+        cout << endl << "gets " << smallTotal << " " << i << endl;
+        digitsCheck.push_back(fourDigits);
+        answerCheck.push_back(smallTotal);
+        total += smallTotal;
+
+    }
+    //answerKey = FindAnswerKey(digits);
+    //cout << GivesRealDigit("cdbaf",answerKey) << endl;
+
+    cout << "total " << total << endl;
+    // 115941531 is too high
+    // 115932690 is too high
+    // the answer is 1027483
+    return 0;
+}
+
+
