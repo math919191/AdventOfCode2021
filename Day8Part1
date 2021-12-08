@@ -1,0 +1,94 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+
+const int BOARD_SIZE = 1000; // 1000
+const int INPUT_SIZE = 200;
+vector<string> ReadTheInput(){
+    vector<string> theInput(INPUT_SIZE);
+    ifstream inFS;
+    // Open file
+    inFS.open("input.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < INPUT_SIZE; j++) {
+        string currStr;
+
+        getline(inFS, currStr, '\n'  );
+        //inFS >> currStr;
+        theInput.at(j) = currStr;
+
+    }
+
+
+    inFS.close();
+
+    return theInput;
+
+}
+
+
+int main() {
+    vector<string> input = ReadTheInput();
+    vector<string> digits;
+    int newTotal = 0;
+    for (int i =0; i < input.size(); i++){
+        string currInput = input.at(i);
+        int pos = currInput.find("|");
+        currInput.erase(0, pos+1);
+
+        for (int q =0; q < 4; q++){
+            string currSubString;
+            int length;
+
+            if (q == 3){
+                currSubString = currInput;
+                digits.push_back( currSubString );
+                //cout <<  q << currSubString << endl;
+                length = currSubString.length();
+
+            } else{
+                int pos2 = currInput.find(" ", 1);
+                if (q == 0){
+                    currSubString = currInput.substr(1, pos2);
+                    length = currSubString.length() - 1;
+
+
+                } else{
+                    currSubString = currInput.substr(0, pos2);
+                    length = currSubString.length();
+                }
+                //cout << q << currSubString << endl;
+                digits.push_back( currSubString );
+                currInput.erase(0, pos2+1);
+            }
+
+            if (length == 2 || length == 4 || length == 3 || length == 7 ){
+                newTotal+=1;
+            }
+
+        }
+
+    }
+    int total =0;
+    for (int j =0; j < digits.size(); j++){
+        string currDigit = digits.at(j);
+
+        if (currDigit.length() == 2 || 3 || 4||7){
+            //cout << currDigit << endl;
+            total +=1;
+        }
+    }
+    cout << newTotal;
+    return 0;
+}
+
+
