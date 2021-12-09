@@ -1,0 +1,284 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+#include <algorithm>
+
+
+const int BOARD_SIZE = 100; // 100 // 5
+const int BOARD_WIDTH = 100; // 100 // 10
+
+const int INPUT_SIZE = 100; // 100
+vector<string> ReadTheInput(){
+    vector<string> theInput(INPUT_SIZE);
+    ifstream inFS;
+    // Open filer
+    inFS.open("realinput.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < INPUT_SIZE; j++) {
+        string currStr;
+
+        getline(inFS, currStr, '\n'  );
+        //inFS >> currStr;
+        theInput.at(j) = currStr;
+
+    }
+
+
+    inFS.close();
+
+    return theInput;
+
+}
+
+void BoardToString(char theBoard[BOARD_SIZE][ BOARD_WIDTH]){
+    theBoard[0][0] = 1;
+
+    for (int i =0; i < BOARD_SIZE; i++){
+        for (int j = 0; j <  BOARD_WIDTH; j++){
+            //theBoard[i][j] = 1;
+            cout << theBoard[j][i] << " ";
+        }
+        cout << endl;
+    }
+
+}
+
+vector<vector<int>> AddIfNotInList(vector<vector<int>> listOfPoints, vector<int> newPoint){
+
+    for (int i =0; i < listOfPoints.size(); i++){
+        if (listOfPoints.at(i).at(0) == newPoint.at(0) && listOfPoints.at(i).at(1) == newPoint.at(1)){
+            return listOfPoints;
+        }
+    }
+    listOfPoints.push_back(newPoint);
+    return listOfPoints;
+}
+
+bool CheckIfInList(vector<vector<int>> listOfPoints, vector<int> newPoint){
+    for (int i =0; i < listOfPoints.size(); i++){
+        if (listOfPoints.at(i).at(0) == newPoint.at(0) && listOfPoints.at(i).at(1) == newPoint.at(1)){
+            return true;
+        }
+    }
+    return false;
+
+}
+
+bool CheckIfPointIsValid(int i, int j){
+    if (i >= 0 && j >=0 && i < BOARD_SIZE && j < BOARD_WIDTH){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+vector<vector<int>> AddSurroundingPoints(vector<vector<int>> listOfPoints, vector<int> newPoint, char theBoard[BOARD_SIZE][ BOARD_WIDTH]){
+
+    //Check if already in the list
+
+    int i = newPoint.at(0);
+    int j = newPoint.at(1);
+
+    int up = theBoard[i - 1][j]  - '0';
+    int down = theBoard[i + 1][j]  - '0';
+    int left = theBoard[i][j - 1]  - '0';
+    int right = theBoard[i][j+1]  - '0';
+
+    if (CheckIfPointIsValid(i-1, j) && up != 9){
+        listOfPoints = AddIfNotInList(listOfPoints, {i-1, j});
+    }
+    if (CheckIfPointIsValid(i+1, j) && down != 9){
+        listOfPoints = AddIfNotInList(listOfPoints, {i+1, j});
+    }
+    if (CheckIfPointIsValid(i, j-1) && left != 9 ){
+        listOfPoints = AddIfNotInList(listOfPoints, {i, j -1});
+    }
+    if (CheckIfPointIsValid(i, j+1) && right != 9){
+        listOfPoints = AddIfNotInList(listOfPoints, {i, j + 1});
+    }
+    return listOfPoints;
+}
+
+bool FoundAllPoints(vector<vector<int>> points, char theBoard[BOARD_SIZE][ BOARD_WIDTH]){
+    int size;
+    int nothing = 0;
+    for (int i = 0; i < points.size(); i++){
+        size = points.size();
+        if ( AddSurroundingPoints(points, points.at(i), theBoard).size() == size ){
+            //nothing new was added
+            // keep going
+            nothing +=1;
+        } else {
+            return false;
+        }
+
+
+    }
+    return true;
+
+
+}
+
+void PrintBasinPoints(vector<vector<int>> points){
+
+    for (int i = 0; i < points.size(); i ++){
+        cout << points.at(i).at(0) << " " << points.at(i).at(1) << endl;
+    }
+
+}
+
+
+int FindBasinSize(char theBoard[BOARD_SIZE][ BOARD_WIDTH], int posi, int posj){
+    int basinSize;
+    bool keepGoing = true;
+    vector<vector<int>> basinPoints;
+    basinPoints.push_back( {posi, posj} );
+    int sizeOfPoints = 0;
+
+    int counter = 0;
+    do {
+
+        basinPoints = AddSurroundingPoints(basinPoints, basinPoints.at(counter), theBoard);
+        //cout << "new one "<< endl;
+        //PrintBasinPoints(basinPoints);
+        if (FoundAllPoints(basinPoints, theBoard)){
+            keepGoing = false;
+        }
+        counter++;
+    }while(keepGoing);
+
+    basinSize = basinPoints.size();
+    return basinSize;
+}
+
+int main() {
+    vector<string> input = ReadTheInput();
+    static char theBoard[BOARD_SIZE][ BOARD_WIDTH];
+
+    vector<int> basinI;
+    vector<int> basinJ;
+
+
+    //get the input
+    for (int i =0; i< BOARD_SIZE; i++){
+        for (int j =0; j <  BOARD_WIDTH; j++){
+            string currLine = input.at(i);
+            theBoard[i][j] = currLine.at(j);
+
+        }
+
+    }
+
+    int total = 0;
+    //find all the basins and add them to the lists
+    for (int i =0; i < BOARD_SIZE; i++){
+
+        for (int j =0; j <  BOARD_WIDTH; j++){
+            char currChar = theBoard[i][j];
+            //if (i == 0 || i == BOARD_SIZE || j == 0 || j == BOARD_SIZE){
+            if (i == 0){ //top of the board
+                char down = theBoard[i + 1][j];
+                char left = theBoard[i][j - 1];
+                char right = theBoard[i][j+1];
+                if (currChar < down && currChar < left && currChar < right){
+                    int intChar = currChar - '0';
+                        basinI.push_back(i);
+                        basinJ.push_back(j);
+
+                    total += 1 + intChar;
+                }
+
+            } else if (i == BOARD_SIZE - 1){ //bottomOfBoard
+                char up = theBoard[i - 1][j];
+                char left = theBoard[i][j - 1];
+                char right = theBoard[i][j+1];
+
+                if (currChar < up && currChar < left && currChar < right){
+                    int intChar = currChar - '0';
+                        basinI.push_back(i);
+                        basinJ.push_back(j);
+
+
+                    total += 1 + intChar;
+                }
+            }
+            else if (j == 0){ //left of the board
+                char up = theBoard[i - 1][j];
+                char down = theBoard[i + 1][j];
+                char right = theBoard[i][j+1];
+
+                if (currChar < down && currChar < up && currChar < right){
+                    int intChar = currChar - '0';
+                        basinI.push_back(i);
+                        basinJ.push_back(j);
+
+
+                    total += 1 + intChar;
+                }
+
+            } else if (j ==  BOARD_WIDTH - 1){ //right of board
+                char up = theBoard[i - 1][j];
+                char down = theBoard[i + 1][j];
+                char left = theBoard[i][j - 1];
+
+                if (currChar < up && currChar < left && currChar < down){
+                    int intChar = currChar - '0';
+                        basinI.push_back(i);
+                        basinJ.push_back(j);
+
+
+                    total += 1 + intChar;
+                }
+            }
+
+            else { // middle of the board
+                char up = theBoard[i - 1][j];
+                char down = theBoard[i + 1][j];
+                char left = theBoard[i][j - 1];
+                char right = theBoard[i][j+1];
+
+                if (currChar < up && currChar < down && currChar < left && currChar < right){
+                    int intChar = currChar - '0';
+                        basinI.push_back(i);
+                        basinJ.push_back(j);
+
+
+                    total += 1 + intChar;
+                }
+            }
+
+
+        }
+
+    }
+
+
+    vector<int> mySizes;
+
+    for (int q = 0; q < basinI.size(); q++){
+
+        int mysize = FindBasinSize(theBoard, basinI.at(q), basinJ.at(q));
+        mySizes.push_back(mysize);
+    }
+
+    sort(mySizes.begin(), mySizes.end());
+    int currSize = mySizes.size();
+
+    cout << mySizes.at(currSize - 1) * mySizes.at(currSize - 2) * mySizes.at(currSize - 3) << endl;
+
+    //cout << "total " << total << endl;
+    //first answer 508
+    return 0;
+}
+
+
