@@ -1,0 +1,145 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+
+const int BOARD_SIZE = 100; // 100 // 10
+const int BOARD_WIDTH = 100; // 100 // 5
+
+const int INPUT_SIZE = 100; // 100
+vector<string> ReadTheInput(){
+    vector<string> theInput(INPUT_SIZE);
+    ifstream inFS;
+    // Open filer
+    inFS.open("realinput.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < INPUT_SIZE; j++) {
+        string currStr;
+
+        getline(inFS, currStr, '\n'  );
+        //inFS >> currStr;
+        theInput.at(j) = currStr;
+
+    }
+
+
+    inFS.close();
+
+    return theInput;
+
+}
+
+void BoardToString(char theBoard[BOARD_SIZE][ BOARD_WIDTH]){
+    theBoard[0][0] = 1;
+
+    for (int i =0; i < BOARD_SIZE; i++){
+        for (int j = 0; j <  BOARD_WIDTH; j++){
+            //theBoard[i][j] = 1;
+            cout << theBoard[j][i] << " ";
+        }
+        cout << endl;
+    }
+
+}
+
+
+    //Find A
+int main() {
+    vector<string> input = ReadTheInput();
+    static char theBoard[BOARD_SIZE][ BOARD_WIDTH];
+
+    for (int i =0; i< BOARD_SIZE; i++){
+        for (int j =0; j <  BOARD_WIDTH; j++){
+            string currLine = input.at(i);
+            theBoard[i][j] = currLine.at(j);
+
+        }
+
+    }
+    //BoardToString(theBoard);
+    int total = 0;
+    for (int i =0; i < BOARD_SIZE; i++){
+
+        for (int j =0; j <  BOARD_WIDTH; j++){
+            char currChar = theBoard[i][j];
+            //if (i == 0 || i == BOARD_SIZE || j == 0 || j == BOARD_SIZE){
+            if (i == 0){ //top of the board
+                char down = theBoard[i + 1][j];
+                char left = theBoard[i][j - 1];
+                char right = theBoard[i][j+1];
+                if (currChar < down && currChar < left && currChar < right){
+                    int intChar = currChar - '0';
+                    cout << intChar << endl;
+                    total += 1 + intChar;
+                }
+
+            } else if (i == BOARD_SIZE - 1){ //bottomOfBoard
+                char up = theBoard[i - 1][j];
+                char left = theBoard[i][j - 1];
+                char right = theBoard[i][j+1];
+
+                if (currChar < up && currChar < left && currChar < right){
+                    int intChar = currChar - '0';
+                    cout << intChar << endl;
+
+                    total += 1 + intChar;
+                }
+            }
+            else if (j == 0){ //left of the board
+                char up = theBoard[i - 1][j];
+                char down = theBoard[i + 1][j];
+                char right = theBoard[i][j+1];
+
+                if (currChar < down && currChar < up && currChar < right){
+                    int intChar = currChar - '0';
+                    cout << intChar << endl;
+
+                    total += 1 + intChar;
+                }
+
+            } else if (j ==  BOARD_WIDTH - 1){ //right of board
+                char up = theBoard[i - 1][j];
+                char down = theBoard[i + 1][j];
+                char left = theBoard[i][j - 1];
+
+                if (currChar < up && currChar < left && currChar < down){
+                    int intChar = currChar - '0';
+                    cout << intChar << endl;
+
+                    total += 1 + intChar;
+                }
+            }
+
+            else { // middle of the board
+                char up = theBoard[i - 1][j];
+                char down = theBoard[i + 1][j];
+                char left = theBoard[i][j - 1];
+                char right = theBoard[i][j+1];
+
+                if (currChar < up && currChar < down && currChar < left && currChar < right){
+                    int intChar = currChar - '0';
+                    cout << intChar << endl;
+
+                    total += 1 + intChar;
+                }
+            }
+
+
+        }
+
+    }
+
+
+    cout << "total " << total << endl;
+    return 0;
+}
+
+
