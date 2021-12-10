@@ -1,0 +1,146 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+#include <algorithm>
+
+
+const int BOARD_SIZE = 100; // 100 // 5
+const int BOARD_WIDTH = 100; // 100 // 10
+const int INPUT_SIZE = 94; // 100
+vector<string> ReadTheInput(){
+    vector<string> theInput(INPUT_SIZE);
+    ifstream inFS;
+    // Open filer
+    inFS.open("realinput.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < INPUT_SIZE; j++) {
+        string currStr;
+
+        getline(inFS, currStr, '\n'  );
+        //inFS >> currStr;
+        theInput.at(j) = currStr;
+
+    }
+
+
+    inFS.close();
+
+    return theInput;
+
+}
+
+vector<char> GetRidOfTheGood(vector<char> line){
+
+    for (int i = 0; i < line.size() - 1; i++ ){
+        //cout << line.at(i) << line.at(i + 1) << endl;
+
+        if ((line.at(i)) == '<' && (line.at(i + 1)) == '>'){
+            line.erase(line.begin() + i);
+            line.erase(line.begin() + i);
+            return line;
+
+        } if ((line.at(i)) == '(' && (line.at(i + 1)) == ')'){
+            line.erase(line.begin() + i);
+            line.erase(line.begin() + i);
+            return line;
+        } if ((line.at(i)) == '{' && (line.at(i + 1)) == '}'){
+            line.erase(line.begin() + i);
+            line.erase(line.begin() + i);
+            return line;
+        } if ((line.at(i)) == '[' && (line.at(i + 1)) == ']'){
+            line.erase(line.begin() + i);
+            line.erase(line.begin() + i);
+            return line;
+        }
+    }
+    return line;
+
+}
+
+bool CheckIfSame(vector<char> vect1, vector<char> vect2 ){
+    if (vect1 == vect2){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void PrintLine(vector<char> line){
+    for (int i = 0; i < line.size(); i++){
+        cout << line.at(i);
+    }
+    cout << endl;
+}
+
+int FindPoints(vector<char> line){
+    char currChar;
+    for (int i = 0; i < line.size(); i++){
+        currChar = line.at(i);
+        if (currChar == ')'){
+            return 3;
+        } else if (currChar == ']'){
+            return 57;
+        } else if (currChar == '}'){
+            return 1197;
+        } else if (currChar == '>'){
+            return 25137;
+
+        }
+
+    }
+    return 0;
+
+}
+
+
+vector<char> CleanLine(vector<char>line){
+    vector<char> otherLine;
+    do {
+        otherLine = line;
+        line = GetRidOfTheGood(line);
+
+    }while(CheckIfSame(line, otherLine) == false);
+
+
+    return line;
+}
+
+
+int main() {
+    vector<string> input = ReadTheInput();
+    vector<vector<char>> lines;
+    for (int i = 0; i < INPUT_SIZE; i++){
+        vector<char> tempInput;
+        string line = input.at(i);
+        for (int j = 0; j < line.size(); j++ ){
+            tempInput.push_back( line.at(j));
+        }
+        lines.push_back(tempInput);
+    }
+
+    int total =0;
+    for (int q =0; q < INPUT_SIZE; q++){
+        vector<char>line = lines.at(q);
+        vector<char>newLine;
+        newLine = CleanLine(line);
+        int points =  FindPoints(newLine);
+        //cout << points << endl;
+        total += points;
+
+    }
+    cout << total;
+
+
+    return 0;
+}
+
+
