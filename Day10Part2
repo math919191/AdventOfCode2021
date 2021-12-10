@@ -1,0 +1,176 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+#include <algorithm>
+
+
+const int BOARD_SIZE = 100; // 100 // 5
+const int BOARD_WIDTH = 100; // 100 // 10
+const int INPUT_SIZE = 94; // 94
+vector<string> ReadTheInput(){
+    vector<string> theInput(INPUT_SIZE);
+    ifstream inFS;
+    // Open filer
+    inFS.open("realinput.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < INPUT_SIZE; j++) {
+        string currStr;
+
+        getline(inFS, currStr, '\n'  );
+        //inFS >> currStr;
+        theInput.at(j) = currStr;
+
+    }
+
+
+    inFS.close();
+
+    return theInput;
+
+}
+
+vector<char> GetRidOfTheGood(vector<char> line){
+
+    for (int i = 0; i < line.size() - 1; i++ ){
+        //cout << line.at(i) << line.at(i + 1) << endl;
+
+        if ((line.at(i)) == '<' && (line.at(i + 1)) == '>'){
+            line.erase(line.begin() + i);
+            line.erase(line.begin() + i);
+            return line;
+
+        } if ((line.at(i)) == '(' && (line.at(i + 1)) == ')'){
+            line.erase(line.begin() + i);
+            line.erase(line.begin() + i);
+            return line;
+        } if ((line.at(i)) == '{' && (line.at(i + 1)) == '}'){
+            line.erase(line.begin() + i);
+            line.erase(line.begin() + i);
+            return line;
+        } if ((line.at(i)) == '[' && (line.at(i + 1)) == ']'){
+            line.erase(line.begin() + i);
+            line.erase(line.begin() + i);
+            return line;
+        }
+    }
+    return line;
+
+}
+
+bool CheckIfSame(vector<char> vect1, vector<char> vect2 ){
+    if (vect1 == vect2){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void PrintLine(vector<char> line){
+    for (int i = 0; i < line.size(); i++){
+        cout << line.at(i);
+    }
+    cout << endl;
+}
+
+int FindPoints(vector<char> line){
+    char currChar;
+    for (int i = 0; i < line.size(); i++){
+        currChar = line.at(i);
+        if (currChar == ')'){
+            return 3;
+        } else if (currChar == ']'){
+            return 57;
+        } else if (currChar == '}'){
+            return 1197;
+        } else if (currChar == '>'){
+            return 25137;
+
+        }
+
+    }
+    return 0;
+
+}
+
+unsigned long long int FindPointsPart2(vector<char> line){
+    char currChar;
+    unsigned long long int total = 0;
+    int size = line.size() - 1;
+    for (int i = size; i >= 0; i--){
+        total*=5;
+        currChar = line.at(i);
+        if (currChar == '('){
+            total+= 1;
+        } else if (currChar == '['){
+            total += 2;
+        } else if (currChar == '{'){
+            total+= 3;
+        } else if (currChar == '<'){
+            total+= 4;
+        }
+
+    }
+    return total;
+
+}
+
+
+
+vector<char> CleanLine(vector<char>line){
+    vector<char> otherLine;
+    do {
+        otherLine = line;
+        line = GetRidOfTheGood(line);
+
+    }while(CheckIfSame(line, otherLine) == false);
+
+
+    return line;
+}
+
+
+int main() {
+    vector<string> input = ReadTheInput();
+    vector<vector<char>> lines;
+    for (int i = 0; i < INPUT_SIZE; i++){
+        vector<char> tempInput;
+        string line = input.at(i);
+        for (int j = 0; j < line.size(); j++ ){
+            tempInput.push_back( line.at(j));
+        }
+        lines.push_back(tempInput);
+    }
+
+    int total = 0;
+    vector<unsigned long long int> scores;
+    int total2 = 0;
+    for (int q =0; q < INPUT_SIZE; q++){
+        vector<char>line = lines.at(q);
+        vector<char>newLine;
+        newLine = CleanLine(line);
+        int points =  FindPoints(newLine);
+        if (points == 0){ //it's not corrupted
+            unsigned long long int score =  FindPointsPart2(newLine);
+            //PrintLine(newLine);
+            //cout << score << endl;
+            scores.push_back(score);
+
+        }
+        total += points;
+    }
+    sort(scores.begin(), scores.end());
+
+    cout << scores.at(scores.size() / 2);
+    return 0;
+}
+
+
