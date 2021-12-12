@@ -1,0 +1,145 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+#include <algorithm>
+
+int const INPUT_SIZE = 7;
+vector<vector<string>> allPaths;
+
+
+vector<string> ReadTheInput(){
+    vector<string> theInput(INPUT_SIZE);
+    ifstream inFS;
+    // Open filer
+    inFS.open("input.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < INPUT_SIZE; j++) {
+        string currStr;
+        getline(inFS, currStr, '\n'  );
+        //inFS >> currStr;
+        theInput.at(j) = currStr;
+    }
+    inFS.close();
+    return theInput;
+}
+
+void PrintVect(vector<string> vect){
+
+    for (int i = 0; i < vect.size(); i++){
+        cout << vect.at(i) << " ";
+    }
+    cout << endl;
+}
+
+vector<string> FindLinks(string connection1, vector<vector<string>> connections){
+    vector<string> nextPoints;
+    for (int i =0; i < connections.size(); i++){
+        vector<string> currPath = connections.at(i);
+        if (currPath.at(0) == connection1){
+            nextPoints.push_back(currPath.at(1));
+        } else if (currPath.at(1) == connection1){
+            nextPoints.push_back(currPath.at(0));
+        }
+    }
+    return nextPoints;
+}
+
+bool LowerCaseAlreadyIn(string caveName, vector<string> path ){
+    char firstLetter = caveName.at(0);
+    if (isupper(firstLetter) != true ){ //it's lowercase
+        for (int i =0; i < path.size(); i++){
+            if (caveName == path.at(i)){
+                return true;
+            }
+        }
+    }
+    return false;
+
+}
+
+bool AddLinkInPath(vector<string> links, vector<string>&myPath){
+    int linkNum;
+    bool endLinkPresent;
+    for (int i =0; i < links.size(); i++){
+        string currCaveName = links.at(i);
+        if ( currCaveName == "start"){
+            //don't do anything
+        } else if (LowerCaseAlreadyIn(currCaveName, myPath)){
+            //don't do anything
+        } else if (currCaveName == "end"){
+            endLinkPresent = true;
+            
+        } else{
+            myPath.push_back(links.at(i));
+            return true;
+        }
+    }
+    if (endLinkPresent){
+        myPath.push_back("end");
+    }
+
+    return false;
+}
+
+vector<string> FindAPathThrough(vector<vector<string>> connections){
+    vector<string> myPath;
+
+    myPath.push_back("start");
+    myPath.push_back("b");
+
+
+    do {
+        vector<string> links = FindLinks(myPath.at( myPath.size() - 1), connections);
+        AddLinkInPath(links, myPath);
+
+        PrintVect(myPath);
+
+    } while(myPath.at( myPath.size() - 1) != "end");
+
+    return myPath;
+}
+
+
+void AddIfNoDuplicates(string caveName, vector<string>&caveNames){
+    for (int i = 0; i < caveNames.size(); i++){
+        if (caveName == caveNames.at(i)){
+            return;
+        }
+    }
+    caveNames.push_back(caveName);
+}
+
+int main() {
+    vector<string> input = ReadTheInput();
+    vector<vector<string>> connections;
+    vector<string> caveNames;
+
+
+
+    for (int i =0; i < INPUT_SIZE; i++){
+        string currLine = input.at(i);
+        int pos = currLine.find("-");
+        string point1 = currLine.substr(0,pos);
+        currLine.erase(0, pos+1);
+        string point2 = currLine;
+        connections.push_back({point1, point2});
+        AddIfNoDuplicates(point1, caveNames);
+        AddIfNoDuplicates(point2, caveNames);
+
+    }
+
+    FindAPathThrough(connections);
+
+    return 0;
+}
+
+
