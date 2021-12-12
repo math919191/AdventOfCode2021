@@ -1,0 +1,166 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+#include <algorithm>
+
+const int INPUT_SIZE = 10;
+int flashCount = 0;
+bool flashed[INPUT_SIZE][INPUT_SIZE];
+
+bool CheckIfAllFlash(){
+
+    for (int i =0; i < INPUT_SIZE; i++){
+        for (int j =0; j < INPUT_SIZE; j++){
+            if (flashed[i][j] == false){
+                return false;
+            }
+
+        }
+
+    }
+    return true;
+
+}
+
+
+void OctopusFlash(int theBoard[INPUT_SIZE][INPUT_SIZE], int iVal, int jVal);
+
+
+vector<string> ReadTheInput(){
+    vector<string> theInput(INPUT_SIZE);
+    ifstream inFS;
+    // Open filer
+    inFS.open("input.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < INPUT_SIZE; j++) {
+        string currStr;
+        getline(inFS, currStr, '\n'  );
+        //inFS >> currStr;
+        theInput.at(j) = currStr;
+    }
+    inFS.close();
+    return theInput;
+}
+
+void OutputBoard(int theBoard[INPUT_SIZE][INPUT_SIZE]){
+
+    for (int i =0; i < INPUT_SIZE; i++){
+        for (int j = 0; j <  INPUT_SIZE; j++){
+            cout << theBoard[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+}
+
+void IncreaseEnergyLevel(int theBoard[INPUT_SIZE][INPUT_SIZE], int iVal, int jVal){
+
+        if( iVal < 0) return;
+        if (jVal < 0) return;
+        if (jVal > (INPUT_SIZE -1) ) return;
+        if (iVal >  (INPUT_SIZE -1) ) return;
+        if (flashed[iVal][jVal] == true) return;
+        //This is a valid point
+        theBoard[iVal][jVal] +=1;
+        if (theBoard[iVal][jVal] > 9) {
+            OctopusFlash(theBoard, iVal, jVal);
+            theBoard[iVal][jVal] = 0;
+        }
+
+
+}
+
+void OctopusFlash(int theBoard[INPUT_SIZE][INPUT_SIZE], int iVal, int jVal){
+
+    if (flashed[iVal][jVal] == true) return;
+
+    flashed[iVal][jVal] = true;
+
+    flashCount++;
+
+    IncreaseEnergyLevel(theBoard, iVal, jVal + 1);
+    IncreaseEnergyLevel(theBoard, iVal - 1, jVal + 1);
+    IncreaseEnergyLevel(theBoard, iVal + 1, jVal + 1);
+    IncreaseEnergyLevel(theBoard, iVal - 1, jVal - 1);
+    IncreaseEnergyLevel(theBoard, iVal, jVal - 1);
+    IncreaseEnergyLevel(theBoard, iVal + 1, jVal - 1);
+    IncreaseEnergyLevel(theBoard, iVal - 1, jVal);
+    IncreaseEnergyLevel(theBoard, iVal + 1, jVal);
+
+
+}
+
+void ResetFlashers(){
+
+
+
+    for (int i =0; i < INPUT_SIZE; i++){
+        for (int j = 0; j <  INPUT_SIZE; j++){
+            flashed[i][j] = false;
+        }
+    }
+}
+
+bool Step(int theBoard[INPUT_SIZE][INPUT_SIZE]){
+
+    for (int i =0; i < INPUT_SIZE; i++){
+        for (int j = 0; j <  INPUT_SIZE; j++){
+            IncreaseEnergyLevel(theBoard, i, j);
+        }
+    }
+    if (CheckIfAllFlash() ) {
+        cout << "THIS IS IT" << endl;
+        return true;
+    };
+    ResetFlashers();
+    return false;
+}
+
+
+int main() {
+    vector<string> input = ReadTheInput();
+    int theBoard[INPUT_SIZE][INPUT_SIZE];
+
+
+
+    for (int i =0; i < INPUT_SIZE; i++){
+        string currLine = input.at(i);
+        for (int j =0; j < INPUT_SIZE; j++){
+            int num = currLine.at(j) - '0';
+            flashed[i][j] = false;
+            theBoard[i][j] = num;
+        }
+    }
+
+
+    int total =0;
+    int const NUM_ITERATIONS = 500;
+
+    for (int i =0; i < NUM_ITERATIONS; i++){
+        //OutputBoard(theBoard);
+        //cout << endl;
+        bool allFlashed = Step(theBoard);
+        if (allFlashed){
+            cout << "DA ANSWER = " << i << endl;
+
+        }
+        //Step(theBoard, newTotal);
+    }
+
+
+    OutputBoard(theBoard);
+    cout << "flash count " << flashCount << endl;
+
+    return 0;
+}
+
+
