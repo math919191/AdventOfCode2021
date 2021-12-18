@@ -1,0 +1,196 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+#include <algorithm>
+
+//const int INPUT_SIZE = 18;
+const int INPUT_SIZE = 916;
+
+
+const int SIZE_X = 655 * 2 + 1; //11;
+const int SIZE_Y = 447 * 2 + 1; //15;
+
+//const int SIZE_X = 5 * 2 + 1; //11;
+//const int SIZE_Y = 7 * 2 + 1; //15;
+
+
+bool static theBoard[SIZE_X][SIZE_Y];
+
+vector<string> ReadTheInput(){
+    vector<string> theInput(INPUT_SIZE);
+    ifstream inFS;
+    // Open filer
+    inFS.open("input.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < INPUT_SIZE; j++) {
+        string currStr;
+        getline(inFS, currStr, '\n'  );
+        //inFS >> currStr;
+        theInput.at(j) = currStr;
+    }
+    inFS.close();
+    return theInput;
+}
+
+void MarkBoard(int x, int y){
+    theBoard[x][y] = true;
+}
+
+
+void SetBoard(){
+    for (int i =0; i < SIZE_X; i++){
+        for (int j =0; j < SIZE_Y; j++){
+            theBoard[SIZE_X][SIZE_Y] = false;
+        }
+    }
+}
+
+
+void FoldBoardHamburger(int currBoardLength, int currBoardHeight){
+
+    for (int i =0; i < currBoardHeight/2; i++){
+
+        for (int j = 0; j < currBoardLength; j++){
+
+            if (theBoard[j][i] == false){
+
+                if (theBoard[j][currBoardHeight - 1 -  i] == true){
+                    theBoard[j][i] = true;
+                }
+            }
+            //theBoard[j][currBoardHeight - 1 -  i] = false;
+
+
+        }
+    }
+}
+
+void FoldBoardHotDog(int currBoardLength, int currBoardHeight){
+
+    for (int i =0; i < currBoardLength/2; i++){
+
+        for (int j = 0; j < currBoardHeight; j++){
+
+
+            /*if (theBoard[currBoardLength - j - 1][i] == true){
+                theBoard[j][i] = true;
+                //theBoard[currBoardLength - j - 1][i] = false;
+            }*/
+            if (theBoard[currBoardLength - i - 1][j] == true){
+                theBoard[i][j] = true;
+                //theBoard[currBoardLength - j - 1][i] = false;
+            }
+
+
+        }
+
+    }
+}
+
+void PrintBoard(int sizeX, int sizeY){
+    for (int i =0; i < sizeY; i++){
+        for (int j =0; j < sizeX; j++){
+            if (theBoard[j][i] == 1){
+                cout << "#";
+            } else {
+                cout << ".";
+            }
+        }
+        cout << endl;
+    }
+}
+
+int NumVisible(int sizeX, int sizeY){
+    int total =0;
+    for (int i =0; i < sizeY; i++){
+        for (int j =0; j < sizeX; j++){
+            if (theBoard[j][i] == 1){
+                total +=1;
+            }
+        }
+
+    }
+    return total;
+}
+
+
+
+
+int FindNumVisible(int length, int height){
+    int total = 0;
+    for (int i = 0; i < length; i++){
+        for (int j = 0; j < height; j++){
+            if(theBoard[i][j] == true){
+                total+=1;
+            }
+        }
+    }
+    return total;
+}
+
+int main() {
+    vector<vector<int>> points;
+    vector<string> myInput = ReadTheInput();
+    int firstXFold = (SIZE_X - 1 )/2 ; //665; //655 //5;
+
+    int firstYFold = (SIZE_Y - 1 )/2 ; //447; //447 //7;
+
+    int currSizeX = firstXFold*2 + 1;
+    int currSizeY = firstYFold*2 + 1;
+
+    SetBoard();
+
+    for (int i =0; i < INPUT_SIZE; i++){
+
+        string currString = myInput.at(i);
+        int pos = currString.find(",");
+        int num1 = stoi ( currString.substr(0, pos) );
+        currString.erase(0, pos+1);
+        int num2 = stoi (currString);
+        points.push_back({num1, num2});
+        //cout << num1 << ", " << num2 << endl;
+        MarkBoard(num1, num2);
+
+    }
+
+
+    //first fold along x=655 --> so hot dog style
+    for (int i =0; i < 5; i++){
+        FoldBoardHotDog(currSizeX, currSizeY);
+        currSizeX = currSizeX/2;
+
+
+        FoldBoardHamburger(currSizeX, currSizeY);
+        currSizeY = currSizeY/2;
+
+
+    }
+
+    FoldBoardHamburger(currSizeX, currSizeY);
+    currSizeY = currSizeY/2;
+
+    FoldBoardHamburger(currSizeX, currSizeY);
+    currSizeY = currSizeY/2;
+
+
+
+
+
+
+
+
+    PrintBoard(currSizeX, currSizeY);
+    //answer to part 1 is 765
+    //ansewr to part 2 is rzkzlpgh
+
+    return 0;
+}
