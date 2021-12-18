@@ -1,0 +1,121 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <iterator>
+
+
+const unsigned long long int INPUT_SIZE = 100;//16
+
+vector<string> ReadTheInput(){
+    vector<string> theInput(INPUT_SIZE);
+    ifstream inFS;
+    // Open filer
+    inFS.open("input.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned long long int j = 0; j < INPUT_SIZE; j++) {
+        string currStr;
+        getline(inFS, currStr, '\n'  );
+        //inFS >> currStr;
+        theInput.at(j) = currStr;
+    }
+    inFS.close();
+    return theInput;
+}
+
+
+string AfterStep(string currString, map<string, string> & polyPairs){
+    unsigned long long int currPlace = 0;
+    unsigned long long int startLeng = currString.length();
+    while (currString.length() < (startLeng*2 - 1) ){
+        string newLetter = polyPairs[currString.substr(currPlace, 2)];
+        currString.insert(currPlace+1, newLetter);
+        currPlace += 2;
+
+    }
+    //cout << currString << endl;
+    //cout << currString.length() << endl;
+    return currString;
+
+}
+
+unsigned long long int CountLetter(string letter, string currChain){
+    unsigned long long int total =0;
+    for (unsigned long long int i =0; i < currChain.length(); i++){
+        char currChar = letter.at(0);
+        if (currChain.at(i) == currChar){
+            total +=1;
+        }
+    }
+    return total;
+}
+
+void AddIfNotAlreadyExisting(string letter, vector<string>& myLetters){
+
+    for (int i = 0; i < myLetters.size(); i++){
+        if (myLetters.at(i) == letter){
+            return;
+        }
+    }
+
+    myLetters.push_back(letter);
+
+}
+
+
+int main() {
+    vector<string> myInput = ReadTheInput();
+    //string chain = "NNCB";
+    string chain = "ONSVVHNCFVBHKVPCHCPV";
+    //string chain = "NN";
+    vector<string> myLetters;
+
+    map<string, string> polyPairs;
+
+
+    for (int i =0; i < INPUT_SIZE; i++){
+        string currString = myInput.at(i);
+        string firstLetters = currString.substr(0, 2);
+        string secondLetter = currString.substr(6, 1);
+        AddIfNotAlreadyExisting(secondLetter, myLetters);
+        polyPairs.insert({firstLetters, secondLetter});
+    }
+
+    int numIt = 10;
+    string currString = chain;
+    for (int i = 0; i < numIt; i++){
+
+        currString = AfterStep(currString, polyPairs);
+        cout << "iteration " << i << endl;
+    }
+
+    vector<unsigned long long int> listOfQuantities;
+
+
+    unsigned long long int max = 0;
+    unsigned long long int min = 10000;
+
+    for (int i =0; i < myLetters.size(); i++ ){
+        unsigned long long int amount = CountLetter(myLetters.at(i), currString);
+        if (amount > max){
+            max = amount;
+        }
+        if (amount < min){
+            min = amount;
+        }
+        listOfQuantities.push_back(amount);
+        //cout << "letter " << myLetters.at(i) << " has " << amount << endl;
+    }
+    cout << "the answer is " << max - min << endl;
+    return 0;
+}
