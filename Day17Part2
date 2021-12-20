@@ -1,0 +1,108 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+
+
+int FindHighestYVal(vector<vector<int>> points){
+    int maxY = 0;
+
+    for (int i =0; i < points.size(); i++){
+        if (points.at(i).at(1) > maxY){
+            maxY = points.at(i).at(1);
+        }
+    }
+    return maxY;
+}
+
+bool CheckIfHitsTarget(vector<vector<int>> points, int minX, int maxX, int minY, int maxY){
+
+    for (int i =0; i < points.size(); i++){
+        vector<int> currPoint = points.at(i);
+        //vector<int> currPoint = {28, -7};
+        if ( (currPoint.at(0) <= maxX) && (currPoint.at(0) >= minX) && (currPoint.at(1) <= maxY) && (currPoint.at(1) >= minY) ){ // checks if within X & Y bounds
+            return true;
+        }
+    }
+    return false;
+}
+
+
+vector<vector<int>> GeneratePoints(int xVelocity, int yVelocity, int maxX, int minY){
+    vector<vector<int>> points;
+    points.push_back({0,0});
+    int myXVel = xVelocity;
+    int myYVel = yVelocity;
+    int xVal;
+    int yVal;
+    //keep adding points until we exceed the target area
+
+    do {
+        vector<int> mostRecentPoint = points.back();
+        xVal = mostRecentPoint.at(0);
+        yVal = mostRecentPoint.at(1);
+
+        xVal += myXVel;
+        yVal += myYVel;
+        if (myXVel > 0) myXVel -=1;
+        else if (myXVel < 0) myXVel +=1;
+        myYVel -=1;
+        points.push_back({xVal, yVal});
+        //cout << xVal << ", " << yVal << endl;
+
+    }while( xVal < maxX && yVal > minY);
+
+    return points;
+}
+
+
+int main() {
+    //TRICK SHOT!
+    //The probe's x position increases by its x velocity.
+    //The probe's y position increases by its y velocity.
+    //Due to drag, the probe's x velocity changes by 1 toward the value 0;
+    //      that is, it decreases by 1 if it is greater than 0, increases by 1 if it is less than 0, or does not change if it is already 0.
+    //Due to gravity, the probe's y velocity decreases by 1.
+
+    //starts at 0,0
+    //target area: x=81..129, y=-150..-10
+    //target area: x=20..30, y=-10..-5
+    /*
+    int targetXMin = 20;
+    int targetXMax = 30;
+    int targetYMin = -10;
+    int targetYMax = -5;
+    */
+    int targetXMin = 81;
+    int targetXMax = 129;
+    int targetYMin = -150;
+    int targetYMax = -108;
+
+
+
+    int maxYVal = 0;
+    //vector<vector<int>> points = GeneratePoints(7,2, targetXMax, targetYMin);
+    //cout << " hits target " << CheckIfHitsTarget(points,  targetXMin, targetXMax,  targetYMin, targetYMax) << endl;
+
+    int totalHits = 0;
+
+    for (int i = 0; i < 200; i++){
+        for (int j = -150; j < 150; j++){
+            vector<vector<int>> points = GeneratePoints(i,j, targetXMax, targetYMin);
+            //cout << i << "," << j;
+            if (CheckIfHitsTarget(points,  targetXMin, targetXMax,  targetYMin, targetYMax)){
+                //
+                totalHits +=1;
+            }
+        }
+
+    }
+
+    cout <<  "answer is "<< totalHits << endl;
+    // 10176 is too high
+
+    return 0;
+}
