@@ -1,0 +1,132 @@
+#include <iostream>
+using namespace std;
+#include <fstream>
+#include <vector>
+#include <iomanip>
+#include <cmath>
+#include <string>
+#include <map>
+
+
+const int SIZE = 100;
+static bool theBoard[SIZE][SIZE][SIZE];
+// where index 0 = -50 and index 99 = 50
+const int ADJUST = SIZE/2;
+
+
+
+vector<string> ReadTheInput(const int INPUT_SIZE = 4){
+    vector<string> theInput(INPUT_SIZE);
+    ifstream inFS;
+    // Open filer
+    inFS.open("input.txt");
+    if (!inFS.is_open()) {
+        cout << "Could not open file" << endl;
+        exit(1);
+    }
+    // read the  file
+    for (unsigned int j = 0; j < INPUT_SIZE; j++) {
+        string currStr;
+        getline(inFS, currStr, '\n'  );
+        //inFS >> currStr;
+        theInput.at(j) = currStr;
+    }
+
+    inFS.close();
+
+    return theInput;
+
+}
+
+
+vector<vector<int>> GiveFormattedInput(vector<string> input){
+    vector<vector<int>> vectOfCubes;
+    for (int i = 0; i < input.size(); i++){
+        vector<int> cubeLimits;
+        string currInput = input.at(i);
+
+        for ( int j =0; j < 3; j++){
+            int pos = currInput.find("=", 1);
+            int pos2 = currInput.find(".", 0);
+            int dist = pos2 - pos - 1;
+            string currDigString = currInput.substr(pos + 1, dist);
+            int currDig = stoi (currDigString);
+            cubeLimits.push_back(currDig);
+
+            currInput.erase(0, pos2);
+
+            pos = 2;
+            pos2 = currInput.find(",", 0);
+            dist = pos2 - pos;
+            currDigString = currInput.substr(pos , dist);
+            currDig = stoi (currDigString);
+            cubeLimits.push_back(currDig);
+
+            currInput.erase(0, pos2);
+        }
+        vectOfCubes.push_back(cubeLimits);
+    }
+
+    return vectOfCubes;
+}
+
+void InitBoard(){
+    for (int i =0; i < SIZE; i++){
+        for (int ii =0; ii < SIZE; ii++){
+            for (int iii =0; iii < SIZE; iii++){
+                theBoard[i][ii][iii] = false;
+            }
+        }
+    }
+
+}
+
+void MarkBoard(vector<int> currCube, char onOrOff){
+    for (int i = currCube.at(0); i <= currCube.at(1); i++){
+        for (int ii = currCube.at(2); ii <= currCube.at(3); ii++){
+            for (int iii = currCube.at(4); iii <= currCube.at(5); iii++){
+                if (onOrOff == 'f'){
+                    theBoard[i+ADJUST][ii+ADJUST][iii+ADJUST] = false;
+                } else {
+                    theBoard[i+ADJUST][ii+ADJUST][iii+ADJUST] = true;
+                }
+            }
+        }
+    }
+}
+
+int FindNumberOn(){
+    int total = 0;
+    for (int i =0; i < SIZE; i++){
+        for (int ii =0; ii < SIZE; ii++){
+            for (int iii =0; iii < SIZE; iii++){
+                if (theBoard[i][ii][iii] == true){
+                    total +=1;
+                }
+            }
+        }
+    }
+    return total;
+}
+
+
+
+
+
+int main() {
+
+    vector<string> theInput = ReadTheInput(20);
+    vector<vector<int>> formattedInput = GiveFormattedInput(theInput);
+    InitBoard();
+
+    for (int i =0; i < formattedInput.size(); i++){
+        vector<int> currCube = formattedInput.at(i);
+        char onOrOff = theInput.at(i).at(1);
+        MarkBoard(currCube, onOrOff);
+
+    }
+
+    cout << "the total is " << FindNumberOn() << endl;
+
+    return 0;
+}
