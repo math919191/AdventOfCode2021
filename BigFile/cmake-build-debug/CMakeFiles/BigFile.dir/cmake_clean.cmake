@@ -1,0 +1,13 @@
+file(REMOVE_RECURSE
+  "BigFile.exe"
+  "BigFile.exe.manifest"
+  "BigFile.pdb"
+  "CMakeFiles/BigFile.dir/Day20.cpp.obj"
+  "CMakeFiles/BigFile.dir/main.cpp.obj"
+  "libBigFile.dll.a"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/BigFile.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
