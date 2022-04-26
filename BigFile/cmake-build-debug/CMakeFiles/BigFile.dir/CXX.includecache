@@ -11,6 +11,18 @@ Day20.h
 C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day20.h
 
 C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day20.h
+iostream
+-
+fstream
+-
+sstream
+-
+string
+-
+vector
+-
+cmath
+-
 
 C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/main.cpp
 iostream
@@ -21,4 +33,8 @@ sstream
 -
 string
 -
+vector
+-
+Day20.h
+C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day20.h
 

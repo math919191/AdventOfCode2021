@@ -2,10 +2,12 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <vector>
+#include "Day20.h"
+
 using namespace std;
 
 int main(int argc, char* argv[]) {
-    cout << "Hello, World!" << endl;
 
     if (argc < 3) {
         cerr << "Please provide name of input and output files";
@@ -22,6 +24,14 @@ int main(int argc, char* argv[]) {
         cerr << "Unable to open " << argv[2] << " for output";
         return 3;
     }
+    vector<string> input;
+
+    for (string line; getline(in, line);) {
+        input.push_back(line);
+    }
+
+    Day20 puzzle(input);
+    cout << puzzle.solve() << endl;
 
     return 0;
 }
