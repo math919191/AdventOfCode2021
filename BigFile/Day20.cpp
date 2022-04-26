@@ -28,9 +28,6 @@ int Day20::getBinary(int x, int y){
 
 }
 
-string Day20::convertFromBinary(int num){
-    return key.at(num) + " ";
-}
 
 void Day20::extendMap(){
     for (int i = 0; i < map.size(); i++){
@@ -42,9 +39,7 @@ void Day20::extendMap(){
     map.insert(map.begin(), newLine);
     map.push_back(newLine);
     map.push_back(newLine);
-    currSize+=2;
-    sizeX = map.at(0).length();
-    sizeY = map.size();
+    currSize+=4;
 
 
 }
@@ -66,7 +61,6 @@ void Day20::enhance(){
     }
     cout << "temp Map:" << endl;
     printMap(tempMap);
-    currSize+=2;
     map = tempMap;
 }
 
@@ -80,13 +74,15 @@ void Day20::printMap(vector<string> theMap){
 
 int Day20::findLitPixels(){
     int count = 0;
-    for (int i = 0; i < map.size(); i++){
-        for (int j = 0; j < map.at(0).length(); j++){
+    cout << "lit pixels" << endl;
+    for (int i = 5; i < map.size()-5; i++){
+        for (int j = 5; j < map.at(0).length()-5; j++){
             if (map.at(i).at(j) == '#') count++;
+            cout << map.at(i).at(j);
         }
+        cout << endl;
     }
     return count;
-
 }
 
 int Day20::solve(){
@@ -100,6 +96,7 @@ int Day20::solve(){
     printMap(map);
     cout << findLitPixels() << endl;
 
+    //5563 is too high it is the wrong answer...
     return 222;
 }
 

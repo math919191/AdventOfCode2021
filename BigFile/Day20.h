@@ -16,9 +16,6 @@ class Day20 {
 private:
     string key = "";
     vector<string> map;
-    vector<string> newMap;
-    int sizeX = 0;
-    int sizeY = 0;
     int currSize = 0;
 
 public:
@@ -28,14 +25,11 @@ public:
             if (i > 1) map.push_back(input.at(i));
         }
 
-        sizeX = map.at(0).length();
-        sizeY = map.size();
-        currSize = sizeY;
+        currSize = map.size();
     }
     int getBinary(int x, int y);
     int solve();
     int determineIfZero(int x, int y);
-    string convertFromBinary(int num);
     void extendMap();
     void enhance();
     void printMap(vector<string> theMap);
