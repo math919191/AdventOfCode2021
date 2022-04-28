@@ -17,6 +17,7 @@ private:
     string key = "";
     vector<string> map;
     int currSize = 0;
+    int currIter = 0;
 
 public:
     Day20(vector<string> input){
@@ -33,7 +34,7 @@ public:
     void extendMap();
     void enhance();
     void printMap(vector<string> theMap);
-    int findLitPixels();
+    int findLitPixels(int numOfTimes);
 
 
     };
