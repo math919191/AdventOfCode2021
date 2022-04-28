@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day20.cpp" "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/cmake-build-debug/CMakeFiles/BigFile.dir/Day20.cpp.obj"
+  "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day21.cpp" "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/cmake-build-debug/CMakeFiles/BigFile.dir/Day21.cpp.obj"
   "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/main.cpp" "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/cmake-build-debug/CMakeFiles/BigFile.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

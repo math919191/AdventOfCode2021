@@ -4,6 +4,10 @@
 CMakeFiles/BigFile.dir/Day20.cpp.obj: \
  ../Day20.cpp \
  ../Day20.h
+CMakeFiles/BigFile.dir/Day21.cpp.obj: \
+ ../Day21.cpp \
+ ../Day21.h
 CMakeFiles/BigFile.dir/main.cpp.obj: \
  ../Day20.h \
+ ../Day21.h \
  ../main.cpp

@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include "Day20.h"
+#include "Day21.h"
+
 
 using namespace std;
 
@@ -30,7 +32,7 @@ int main(int argc, char* argv[]) {
         input.push_back(line);
     }
 
-    Day20 puzzle(input);
+    Day21 puzzle(input);
     cout << puzzle.solve() << endl;
 
     return 0;
