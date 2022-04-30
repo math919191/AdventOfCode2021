@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day20.cpp
-Day20.h
-C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day20.h
+C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day16.cpp
+Day16.h
+C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day16.h
 
-C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day20.h
+C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day16.h
 iostream
 -
 fstream
@@ -23,38 +23,4 @@ vector
 -
 cmath
 -
-
-C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day21.cpp
-Day21.h
-C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day21.h
-
-C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day21.h
-iostream
--
-fstream
--
-sstream
--
-string
--
-vector
--
-cmath
--
-
-C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/main.cpp
-iostream
--
-fstream
--
-sstream
--
-string
--
-vector
--
-Day20.h
-C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day20.h
-Day21.h
-C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day21.h
 

@@ -15,21 +15,29 @@ using namespace std;
 #define BIGFILE_DAY21_H
 
 
-class Day21 {
+class Day15 {
 private:
-    vector<string> map;
+    vector<vector<int>> map;
     int currSize = 0;
+    int width = 0;
+    int height = 0;
+    vector<string> myInput;
 public:
-    Day21(vector<string> input){
+
+    Day15(vector<string> input){
         for (int i = 0; i < input.size(); i++){
-            map.push_back(input.at(i));
+            myInput.push_back(input.at(i));
         }
-        currSize = map.size();
     }
 
     int solve();
+    void printMap();
+    void setMap();
 
 
+    void dijkstraAlgo(vector<vector<int>> graph, int src);
+
+    int miniDist(int *distance, bool *Tset);
 };
 
 
