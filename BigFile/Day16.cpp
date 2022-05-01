@@ -249,9 +249,11 @@ int Day16::solve(){
     parseSubpacket(bits);
 
     cout << "answer: " << endl;
-    int answer = myLiterals.top();
+    unsigned long long answer = myLiterals.top();
     return answer;
 
     //1839691112 too low
     // 1148595959144 is the answer!
+    // it is the last top that is outputted,  not the answer that says "answer"
+    // I think the int / long long conversion caused it to change
 }

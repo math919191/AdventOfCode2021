@@ -176,6 +176,30 @@ Day16.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day16.cpp.s
 .PHONY : Day16.cpp.s
 
+Day18.obj: Day18.cpp.obj
+.PHONY : Day18.obj
+
+# target to build an object file
+Day18.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day18.cpp.obj
+.PHONY : Day18.cpp.obj
+
+Day18.i: Day18.cpp.i
+.PHONY : Day18.i
+
+# target to preprocess a source file
+Day18.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day18.cpp.i
+.PHONY : Day18.cpp.i
+
+Day18.s: Day18.cpp.s
+.PHONY : Day18.s
+
+# target to generate assembly for a file
+Day18.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day18.cpp.s
+.PHONY : Day18.cpp.s
+
 Day20.obj: Day20.cpp.obj
 .PHONY : Day20.obj
 
@@ -199,6 +223,30 @@ Day20.s: Day20.cpp.s
 Day20.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day20.cpp.s
 .PHONY : Day20.cpp.s
+
+boilerplate.obj: boilerplate.cpp.obj
+.PHONY : boilerplate.obj
+
+# target to build an object file
+boilerplate.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/boilerplate.cpp.obj
+.PHONY : boilerplate.cpp.obj
+
+boilerplate.i: boilerplate.cpp.i
+.PHONY : boilerplate.i
+
+# target to preprocess a source file
+boilerplate.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/boilerplate.cpp.i
+.PHONY : boilerplate.cpp.i
+
+boilerplate.s: boilerplate.cpp.s
+.PHONY : boilerplate.s
+
+# target to generate assembly for a file
+boilerplate.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/boilerplate.cpp.s
+.PHONY : boilerplate.cpp.s
 
 main.obj: main.cpp.obj
 .PHONY : main.obj
@@ -239,9 +287,15 @@ help:
 	@echo ... Day16.obj
 	@echo ... Day16.i
 	@echo ... Day16.s
+	@echo ... Day18.obj
+	@echo ... Day18.i
+	@echo ... Day18.s
 	@echo ... Day20.obj
 	@echo ... Day20.i
 	@echo ... Day20.s
+	@echo ... boilerplate.obj
+	@echo ... boilerplate.i
+	@echo ... boilerplate.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

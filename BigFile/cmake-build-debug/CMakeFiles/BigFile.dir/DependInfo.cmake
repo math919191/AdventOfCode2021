@@ -10,7 +10,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day15.cpp" "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/cmake-build-debug/CMakeFiles/BigFile.dir/Day15.cpp.obj"
   "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day16.cpp" "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/cmake-build-debug/CMakeFiles/BigFile.dir/Day16.cpp.obj"
+  "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day18.cpp" "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/cmake-build-debug/CMakeFiles/BigFile.dir/Day18.cpp.obj"
   "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day20.cpp" "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/cmake-build-debug/CMakeFiles/BigFile.dir/Day20.cpp.obj"
+  "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/boilerplate.cpp" "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/cmake-build-debug/CMakeFiles/BigFile.dir/boilerplate.cpp.obj"
   "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/main.cpp" "C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/cmake-build-debug/CMakeFiles/BigFile.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
