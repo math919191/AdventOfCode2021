@@ -12,15 +12,18 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <stack>
+
 
 using namespace std;
 
 class Day16 {
 private:
     vector<string> myInput;
-    vector<int> numbersFromString;
+    vector<int> literalNumbers;
     vector<int> versionNumbers;
     vector<int> versionNumbers2;
+    stack<int> myLiterals;
 
     string origString = "";
 public:
@@ -41,6 +44,10 @@ public:
     string parseLiteralPacket(string subpacket);
 
     int addVersions(vector<int> versions);
+
+    void calcFromID(int id);
+
+    void calcFromID(int id, int numOfLiterals);
 };
 
 

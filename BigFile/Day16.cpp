@@ -69,27 +69,106 @@ string Day16::parseLiteralPacket(string subpacket){
         literal = literal.substr(5);
 
     } while (cont);
-    //int number = stoi(literalValue, 0, 2);
-    //numbersFromString.push_back(number);
+    int number = stoi(literalValue, 0, 2);
+    myLiterals.push(number);
+    literalNumbers.push_back(number);
 
     return literal;
 }
+
+char getTypeIDMeaning(int id){
+    if (id == 0) return '+';
+    else if (id == 1) return '*';
+    else if (id == 2) return 'm';
+    else if (id == 3) return 'M';
+    else if (id == 4) return 'L';
+    else if (id == 5) return '<';
+    else if (id == 6) return '>';
+    else if (id == 7) return '=';
+    else return '!';
+}
+
+void Day16::calcFromID(int id, int numOfLiterals){
+
+    if (id == 0) { //sum
+        int total = 0;
+        for (int i = 0; i < numOfLiterals; i++){
+            int num1 = myLiterals.top();
+            myLiterals.pop();
+            total += num1;
+        }
+        myLiterals.push(total);
+    }
+    else if (id == 1) { //product
+        int product = 1;
+        for (int i = 0; i < numOfLiterals; i++){
+            int num1 = myLiterals.top();
+            myLiterals.pop();
+            product *= num1;
+        }
+        myLiterals.push(product);
+
+    }
+    else if (id == 2) { //minimum
+        int min = INT_MAX;
+        for (int i = 0; i < numOfLiterals; i++){
+            int num1 = myLiterals.top();
+            myLiterals.pop();
+            if (num1 < min) min = num1;
+        }
+        myLiterals.push(min);
+    } else if (id == 3) { //maximum
+        int max = 0;
+        for (int i = 0; i < numOfLiterals; i++){
+            int num1 = myLiterals.top();
+            myLiterals.pop();
+            if (num1 > max) max = num1;
+        }
+        myLiterals.push(max);
+    }
+    else if (id == 4) {
+        //nothing
+    } else if (id == 5) { //greater than
+        int num1 = myLiterals.top();
+        myLiterals.pop();
+        int num2 = myLiterals.top();
+        myLiterals.pop();
+        if (num1 < num2 ) myLiterals.push(1);
+        else myLiterals.push(0);
+
+    } else if (id == 6) { //less than
+        int num1 = myLiterals.top();
+        myLiterals.pop();
+        int num2 = myLiterals.top();
+        myLiterals.pop();
+        if (num1 > num2 ) myLiterals.push(1);
+        else myLiterals.push(0);
+    } else if (id == 7) { //equal to
+        int num1 = myLiterals.top();
+        myLiterals.pop();
+        int num2 = myLiterals.top();
+        myLiterals.pop();
+        if (num1 == num2 ) myLiterals.push(1);
+        else myLiterals.push(0);
+
+    }
+
+}
+
 string Day16::parseSubpacket(string subpacket){
     int typeID = stoi(subpacket.substr(3,3), 0, 2);
-    int version = stoi(subpacket.substr(0,3), 0, 2);
 
-    versionNumbers2.push_back(version);
-    int vers = addVersions(versionNumbers2);
-    cout << vers << endl;
-    if (vers == 53) {
-        cout << "here" << endl;
-    }
     string returning;
     if (typeID == 4){
         returning = parseLiteralPacket(subpacket);
     } else {
+        int currSize = myLiterals.size();
         returning = parsePacket(subpacket);
+        int newSize = myLiterals.size();
+        int diff = newSize - currSize;
+        calcFromID(typeID, diff);
     }
+
     return returning;
 }
 
@@ -140,18 +219,16 @@ int Day16::addVersions(vector<int> versions){
 }
 
 int Day16::solve(){
-    //cout << origString << endl;
-    //string literalValue = "011011111011010011010101100110011101";
-    //int number = stoi(literalValue, 0, 2);
-    //cout << number << endl;
+//    cout << origString << endl;
+//    string literalValue = "011011111011010011010101100110011101";
+//    long long number = stoi(literalValue, 0, 2);
+//    cout << number << endl;
 
     string bits = convertToBITS(origString);
-    //cout << bits;
-    //parsePacket(bits);
-    parseSubpacket(bits);
-    int answer = addVersions(versionNumbers2);
-    int otherAnswer = addVersions(versionNumbers);
 
-    cout << "answer" << endl;
+    parseSubpacket(bits);
+
+    cout << "answer: " << endl;
+    int answer = myLiterals.top();
     return answer;
 }
