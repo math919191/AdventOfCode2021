@@ -47,9 +47,26 @@ string convertToBITS(string hexa){
     return BITS;
 }
 
-//string Day16::parseOperatorPacket(string packet){
-//
-//}
+unsigned long long powerFunction(int base, int power){
+    unsigned long long theNum = 1;
+    for (int i = 0; i < power; i++){
+        theNum *= base;
+    }
+    return theNum;
+}
+
+unsigned long long convertFromBinary(string binary){
+    int length = binary.length();
+    unsigned long long total = 0;
+    for (int i = 0; i < length; i++){
+        unsigned long long num;
+        if (binary.at(i) == '0') num = 0;
+        else num = 1;
+        total += ( num * ( powerFunction(2, (length-i -1) ) ) );
+    }
+    return total;
+
+}
 
 string Day16::parseLiteralPacket(string subpacket){
     //110100101111111000101000
@@ -69,40 +86,30 @@ string Day16::parseLiteralPacket(string subpacket){
         literal = literal.substr(5);
 
     } while (cont);
-    int number = stoi(literalValue, 0, 2);
+    //int number = stoi(literalValue, 0, 2);
+    unsigned long long number = convertFromBinary(literalValue);
     myLiterals.push(number);
+    cout << number << endl;
     literalNumbers.push_back(number);
 
     return literal;
 }
 
-char getTypeIDMeaning(int id){
-    if (id == 0) return '+';
-    else if (id == 1) return '*';
-    else if (id == 2) return 'm';
-    else if (id == 3) return 'M';
-    else if (id == 4) return 'L';
-    else if (id == 5) return '<';
-    else if (id == 6) return '>';
-    else if (id == 7) return '=';
-    else return '!';
-}
-
 void Day16::calcFromID(int id, int numOfLiterals){
 
     if (id == 0) { //sum
-        int total = 0;
+        unsigned long long total = 0;
         for (int i = 0; i < numOfLiterals; i++){
-            int num1 = myLiterals.top();
+            unsigned long long num1 = myLiterals.top();
             myLiterals.pop();
             total += num1;
         }
         myLiterals.push(total);
     }
     else if (id == 1) { //product
-        int product = 1;
+        unsigned long long product = 1;
         for (int i = 0; i < numOfLiterals; i++){
-            int num1 = myLiterals.top();
+            unsigned long long num1 = myLiterals.top();
             myLiterals.pop();
             product *= num1;
         }
@@ -110,17 +117,17 @@ void Day16::calcFromID(int id, int numOfLiterals){
 
     }
     else if (id == 2) { //minimum
-        int min = INT_MAX;
+        unsigned long long min = INT_MAX;
         for (int i = 0; i < numOfLiterals; i++){
-            int num1 = myLiterals.top();
+            unsigned long long num1 = myLiterals.top();
             myLiterals.pop();
             if (num1 < min) min = num1;
         }
         myLiterals.push(min);
     } else if (id == 3) { //maximum
-        int max = 0;
+        unsigned long long max = 0;
         for (int i = 0; i < numOfLiterals; i++){
-            int num1 = myLiterals.top();
+            unsigned long long num1 = myLiterals.top();
             myLiterals.pop();
             if (num1 > max) max = num1;
         }
@@ -129,30 +136,31 @@ void Day16::calcFromID(int id, int numOfLiterals){
     else if (id == 4) {
         //nothing
     } else if (id == 5) { //greater than
-        int num1 = myLiterals.top();
+        unsigned long long num1 = myLiterals.top();
         myLiterals.pop();
-        int num2 = myLiterals.top();
+        unsigned long long num2 = myLiterals.top();
         myLiterals.pop();
         if (num1 < num2 ) myLiterals.push(1);
         else myLiterals.push(0);
 
     } else if (id == 6) { //less than
-        int num1 = myLiterals.top();
+        unsigned long long num1 = myLiterals.top();
         myLiterals.pop();
-        int num2 = myLiterals.top();
+        unsigned long long num2 = myLiterals.top();
         myLiterals.pop();
         if (num1 > num2 ) myLiterals.push(1);
         else myLiterals.push(0);
     } else if (id == 7) { //equal to
-        int num1 = myLiterals.top();
+        unsigned long long num1 = myLiterals.top();
         myLiterals.pop();
-        int num2 = myLiterals.top();
+        unsigned long long num2 = myLiterals.top();
         myLiterals.pop();
         if (num1 == num2 ) myLiterals.push(1);
         else myLiterals.push(0);
 
     }
-
+    cout << "id: "<< id << endl;
+    cout << "top: " << myLiterals.top() << endl;
 }
 
 string Day16::parseSubpacket(string subpacket){
@@ -160,13 +168,23 @@ string Day16::parseSubpacket(string subpacket){
 
     string returning;
     if (typeID == 4){
+        if (myLiterals.size() != 0 && myLiterals.top() == 7){
+            cout << "uhh" << endl;
+        }
         returning = parseLiteralPacket(subpacket);
     } else {
         int currSize = myLiterals.size();
+
+
         returning = parsePacket(subpacket);
         int newSize = myLiterals.size();
         int diff = newSize - currSize;
+        //top is 1205
         calcFromID(typeID, diff);
+    }
+    //top is 7
+    if (myLiterals.size() != 0 && myLiterals.top() == 7){
+        cout << "uhh" << endl;
     }
 
     return returning;
@@ -202,6 +220,7 @@ string Day16::parsePacket(string packet){
         for (int i = 0; i < numberOfPackets; i++){
             string leftOver = parseSubpacket(literal);
             literal = leftOver;
+
             //cout << literal << endl;
         }
     }
@@ -219,9 +238,10 @@ int Day16::addVersions(vector<int> versions){
 }
 
 int Day16::solve(){
+    cout << convertFromBinary("011011111011010011010101100110011101") << endl;
 //    cout << origString << endl;
 //    string literalValue = "011011111011010011010101100110011101";
-//    long long number = stoi(literalValue, 0, 2);
+//    unsigned unsigned long long number = stoi(literalValue, 0, 2);
 //    cout << number << endl;
 
     string bits = convertToBITS(origString);
@@ -231,4 +251,7 @@ int Day16::solve(){
     cout << "answer: " << endl;
     int answer = myLiterals.top();
     return answer;
+
+    //1839691112 too low
+    // 1148595959144 is the answer!
 }

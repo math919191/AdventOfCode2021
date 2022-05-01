@@ -20,10 +20,10 @@ using namespace std;
 class Day16 {
 private:
     vector<string> myInput;
-    vector<int> literalNumbers;
+    vector<long long> literalNumbers;
     vector<int> versionNumbers;
     vector<int> versionNumbers2;
-    stack<int> myLiterals;
+    stack<unsigned long long> myLiterals;
 
     string origString = "";
 public:
