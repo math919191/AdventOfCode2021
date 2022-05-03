@@ -33,27 +33,23 @@ public:
 
     int findIfNeedsSplitting(string snailFishNum);
 
-    string explode(int index);
-
     string explode(int index, string snailNum);
 
     string findNextLeftNumber(int index, string snailNum);
 
     string findNextRightNumber(int index, string snailNum);
 
-    string split(int index, string snailNum);
-
     string split(string snailNum);
-
-    int findMagnitude();
 
     int findMagnitude(string snailNum);
 
-    void test();
+    void part2();
 
     string intToStr(int myInt);
 
     int findMagOfTwoNum(string num1, string num2);
+
+    int part1();
 };
 
 

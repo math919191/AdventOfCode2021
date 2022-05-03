@@ -35,6 +35,6 @@ int main(int argc, char* argv[]) {
 
     Day18 puzzle(input);
     cout << puzzle.solve() << endl;
-    //puzzle.test();
+    //puzzle.part2();
     return 0;
 }

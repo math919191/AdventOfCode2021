@@ -148,7 +148,6 @@ string Day18::findNextRightNumber(int index, string snailNum){
     int rightNumEndIndex = 0;
 
     for (int i = index; i < snailNum.length(); i++){
-        char item = snailNum.at(i);
         if (isdigit(snailNum.at(i))){
             rightNumIndex = i;
             while (true){
@@ -176,8 +175,6 @@ string Day18::findNextRightNumber(int index, string snailNum){
         int num1 = stoi(snailNum.substr(rightNumIndex, rightNumEndIndex-rightNumIndex+1));
 
         int num2 = stoi(snailNum.substr(commaIndex+1, index-commaIndex-1));
-//        int num1 = snailNum.at(rightNumIndex ) - 48;
-//        int num2 = snailNum.at(index-1) - 48;
         int sum =  num1 + num2;
         string strSum = intToStr(sum);
         snailNum.replace(snailNum.begin()+rightNumIndex, snailNum.begin()+rightNumEndIndex+1,strSum);
@@ -244,7 +241,7 @@ int Day18::findMagnitude(string snailNum){
     return mag;
 }
 
-void Day18::test(){
+void Day18::part2(){
     int max = 0;
     for (int i = 0; i < myInput.size(); i++){
         for (int j = 0; j < myInput.size(); j++){
@@ -280,10 +277,7 @@ int Day18::findMagOfTwoNum(string num1, string num2){
     return findMagnitude(currNum);
 }
 
-int Day18::solve(){
-
-    test();
-#if 0
+int Day18::part1(){
     string currNum = myInput.at(0);
     for (int i = 0; i < myInput.size(); i++){
         if (i != myInput.size()-1){
@@ -307,8 +301,12 @@ int Day18::solve(){
     }
     cout << "final answer: " << currNum << endl;
     cout << "final answer: " << findMagnitude(currNum) << endl;
-#endif
+}
+int Day18::solve(){
+    part1();
+    part2();
     cout << endl << endl;
     //4289 was the answer
+    //4807 was the other answer
     return 18;
 }
