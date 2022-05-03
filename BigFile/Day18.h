@@ -52,6 +52,8 @@ public:
     void test();
 
     string intToStr(int myInt);
+
+    int findMagOfTwoNum(string num1, string num2);
 };
 
 

@@ -245,34 +245,60 @@ int Day18::findMagnitude(string snailNum){
 }
 
 void Day18::test(){
-    cout << findMagnitude("[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]") << endl;
+    int max = 0;
+    for (int i = 0; i < myInput.size(); i++){
+        for (int j = 0; j < myInput.size(); j++){
+            if (i != j) {
+                int mag = findMagOfTwoNum(myInput.at(i), myInput.at(j));
+                if (mag > max){
+                    max = mag;
+                }
+            }
+        }
+    }
+    cout << "max " << max << endl;
+
+}
+
+int Day18::findMagOfTwoNum(string num1, string num2){
+    string currNum = add(num1, num2);
+    while (true){
+        while (true){
+            if (findIfInside4Pairs(currNum) > 0){
+                currNum = explode(findIfInside4Pairs(currNum), currNum);
+            } else {
+                break;
+            }
+        }
+        if (findIfNeedsSplitting(currNum) > 0){
+            currNum = split(currNum);
+        }
+        if (findIfNeedsSplitting(currNum) < 0 && findIfInside4Pairs(currNum) < 0){
+            break;
+        }
+    }
+    return findMagnitude(currNum);
 }
 
 int Day18::solve(){
 
-    //string currTest = "[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]";
-    //cout << "exploding: " << explode(findIfInside4Pairs(currTest), currTest);
-
-//#if 0
+    test();
+#if 0
     string currNum = myInput.at(0);
     for (int i = 0; i < myInput.size(); i++){
-        //cout << currNum << endl << endl;
         if (i != myInput.size()-1){
             currNum = add(currNum, myInput.at(i+1));
         }
-
         while (true){
             while (true){
                 if (findIfInside4Pairs(currNum) > 0){
                     currNum = explode(findIfInside4Pairs(currNum), currNum);
-                    //cout << "after explode " << currNum << endl << endl;
                 } else {
                     break;
                 }
             }
             if (findIfNeedsSplitting(currNum) > 0){
                 currNum = split(currNum);
-                //cout << "after split " << currNum << endl << endl;
             }
             if (findIfNeedsSplitting(currNum) < 0 && findIfInside4Pairs(currNum) < 0){
                 break;
@@ -281,8 +307,8 @@ int Day18::solve(){
     }
     cout << "final answer: " << currNum << endl;
     cout << "final answer: " << findMagnitude(currNum) << endl;
-//#endif
+#endif
     cout << endl << endl;
-
+    //4289 was the answer
     return 18;
 }
