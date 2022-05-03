@@ -4,6 +4,14 @@
 #define MAGIC_NUM -1;
 
 #include "Day18.h"
+
+string Day18::intToStr(int myInt){
+    stringstream ss; //converting int to string
+    ss << myInt;
+    string strInt = ss.str();
+    return strInt;
+}
+
 int Day18::findIfInside4Pairs(string snailFishNum){
     int howFar = 0;
     for (int i = 0; i < snailFishNum.length(); i++){
@@ -129,9 +137,49 @@ string Day18::add(string pair1, string pair2){
     return newPair;
 }
 
+int Day18::findMagnitude(string snailNum){
 
+    int mag = 0;
+    int i = 0;
+    int size = snailNum.length();
+    while (i < size){
+        if (snailNum.at(i) == ']'){
+            int commaIndex = 0;
+            for (int k = 0; k < 50; k++){
+                if (snailNum.at(i - k ) == ','){
+                    commaIndex = i-k;
+                    break;
+                }
+            }
+            int openBracketIndex = 0;
+            for (int k = 0; k < 50; k++){
+                if (snailNum.at(commaIndex - k ) == '['){
+                    openBracketIndex = commaIndex - k;
+                    break;
+                }
+            }
+            mag = 0;
+            mag += stoi(snailNum.substr(openBracketIndex+1, openBracketIndex-commaIndex) ) * 3;
+            mag += stoi(snailNum.substr(commaIndex+1, commaIndex-i) ) * 2;
+
+            string strMag = intToStr(mag);
+
+            snailNum.replace(snailNum.begin()+openBracketIndex, snailNum.begin()+i+1,strMag);
+            i = 0; // resets back to the beginning of the string
+            size = snailNum.length(); // prevents going out of range
+        }
+        i++;
+    }
+    return mag;
+}
+
+void Day18::test(){
+
+    cout << findMagnitude("[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]") << endl;
+}
 
 int Day18::solve(){
+
     //string currTest = "[[[[[9,8],1],2],3],4]";
     //string currTest = "[7,[6,[5,[4,[3,2]]]]]";
     //string currTest = "[[6,[5,[4,[3,2]]]],1]";
@@ -166,10 +214,6 @@ int Day18::solve(){
         }
     }
     cout << "final answer: " << currNum << endl;
-    //    cout << "input: " << endl << currTest << endl;
-//    cout << split(currTest) << endl;
-//    string expected = "[[[[0,7],4],[[7,8],[0,[6,7]]]],[1,1]]";
-//    cout << expected << endl;
 
     cout << endl << endl;
     return 18;

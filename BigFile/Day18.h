@@ -44,6 +44,14 @@ public:
     string split(int index, string snailNum);
 
     string split(string snailNum);
+
+    int findMagnitude();
+
+    int findMagnitude(string snailNum);
+
+    void test();
+
+    string intToStr(int myInt);
 };
 
 
