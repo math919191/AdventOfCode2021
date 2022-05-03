@@ -91,8 +91,7 @@ string Day18::split(string snailNum){
     string item = snailNum.substr(index, commaIndex);
     if (index < commaIndex) snailNum.replace(snailNum.begin()+index, snailNum.begin()+commaIndex,newPair);
     else snailNum.replace(snailNum.begin()+commaIndex+1, snailNum.begin()+index+2,newPair);
-    cout << currCurrNum << endl;
-    cout << snailNum << endl;
+
     return snailNum;
 }
 
@@ -189,10 +188,9 @@ string Day18::findNextRightNumber(int index, string snailNum){
 
 string Day18::explode(int index, string snailNum){
     snailNum = findNextLeftNumber(index, snailNum);
-    //cout << "after left "<< snailNum << endl;
 
     snailNum = findNextRightNumber(index, snailNum);
-    //cout << "after right "<< snailNum << endl;
+
     index = findIfInside4Pairs(snailNum);
     int distToBracket = 0;
     while (true){
@@ -200,7 +198,7 @@ string Day18::explode(int index, string snailNum){
         else distToBracket++;
     }
     snailNum.replace(snailNum.begin()+index, snailNum.begin()+index+distToBracket+1,"0");
-    //cout << "after replace "<< snailNum << endl;
+
     return snailNum;
 }
 
@@ -258,7 +256,7 @@ int Day18::solve(){
 //#if 0
     string currNum = myInput.at(0);
     for (int i = 0; i < myInput.size(); i++){
-        cout << currNum << endl << endl;
+        //cout << currNum << endl << endl;
         if (i != myInput.size()-1){
             currNum = add(currNum, myInput.at(i+1));
         }
@@ -267,14 +265,14 @@ int Day18::solve(){
             while (true){
                 if (findIfInside4Pairs(currNum) > 0){
                     currNum = explode(findIfInside4Pairs(currNum), currNum);
-                    cout << "after explode " << currNum << endl << endl;
+                    //cout << "after explode " << currNum << endl << endl;
                 } else {
                     break;
                 }
             }
             if (findIfNeedsSplitting(currNum) > 0){
                 currNum = split(currNum);
-                cout << "after split " << currNum << endl << endl;
+                //cout << "after split " << currNum << endl << endl;
             }
             if (findIfNeedsSplitting(currNum) < 0 && findIfInside4Pairs(currNum) < 0){
                 break;
