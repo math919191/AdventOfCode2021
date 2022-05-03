@@ -27,6 +27,23 @@ public:
 
     int solve();
 
+    string add(string pair1, string pair2);
+
+    int findIfInside4Pairs(string snailFishNum);
+
+    int findIfNeedsSplitting(string snailFishNum);
+
+    string explode(int index);
+
+    string explode(int index, string snailNum);
+
+    string findNextLeftNumber(int index, string snailNum);
+
+    string findNextRightNumber(int index, string snailNum);
+
+    string split(int index, string snailNum);
+
+    string split(string snailNum);
 };
 
 
