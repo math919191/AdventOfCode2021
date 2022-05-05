@@ -21,8 +21,13 @@ private:
     vector<string> myInput;
     string chain = "";
     vector<string> myLetters;
+    vector<string> myPairs;
     map<string, string> polyPairs;
-    map<string, map<string, int>> numOfPairsAfter5Iters;
+    map<string, map<string, long long unsigned int>> pairWithPairsAndFreqsAfterIter;
+    map<string, unsigned long long int> pairsAndFreqOfTrueChain;
+    map<string, unsigned long long int> lettersAndFreqs;
+    int numOfIterationsSmall = 5;
+    int numOfTotalIterations = 10;
     //  original Pair : (otherPairs : numOfTimes)
 
 public:
@@ -38,6 +43,20 @@ public:
     void addIfNotAlreadyExisting(string letter);
 
     string afterStep(string currString);
+
+    map<string, unsigned long long int> findNumOfPairsAfterIterations(string pair, int numIterations);
+
+    unsigned long long int countPairs(string chain, string pair);
+
+    void populatePairsFreqMap();
+
+    int part1();
+
+    void populateLettersAndFreq();
+
+    void computeNumOfLetters();
+
+    void populatePolyPairsAndMyPairs();
 };
 
 
