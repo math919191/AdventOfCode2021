@@ -68,9 +68,8 @@ void Day14::addIfNotAlreadyExisting(string letter){
 }
 
 
-int Day14::part1(){
+int Day14::part1(int numIt){
 
-    int numIt = 10;
     string currString = chain;
     for (int i = 0; i < numIt; i++){
         currString = afterStep(currString);
@@ -89,6 +88,7 @@ int Day14::part1(){
             min = amount;
         }
         listOfQuantities.push_back(amount);
+        cout << myLetters.at(i) << " :: " << amount << endl;
 
     }
     cout << "the answer is " << max - min << endl;
@@ -177,6 +177,7 @@ int Day14::solve(){
         origMap.insert({currPair, freq});
         pairsAndFreqOfTrueChain.insert({currPair, 0});
     }
+    //pairsAndFreqOfTrueChain is completely empty
 
     for (int i = 0; i < (numOfTotalIterations/numOfIterationsSmall); i++) { // the pairs freq map is after 10 iterations ==> 4*10 = 40
 
@@ -202,24 +203,39 @@ int Day14::solve(){
 
             }
 
-
             it++;
         }
         origMap = pairsAndFreqOfTrueChain;
+
         //resetting the pairs and freq map back to all 0s
-        for (int i = 0; i < myPairs.size(); i++) {
-            string currPair = myPairs.at(i);
-            pairsAndFreqOfTrueChain.insert({currPair, 0});
+        if (i != numOfTotalIterations/numOfIterationsSmall -1){
+            for (int i = 0; i < myPairs.size(); i++) {
+                string currPair = myPairs.at(i);
+                pairsAndFreqOfTrueChain[currPair] = 0;
+            }
         }
     }
 
-    printMap(pairsAndFreqOfTrueChain);
-
     computeNumOfLetters();
+
+    printMap(origMap);
+
+
     cout << endl << "letters and counts: " << endl;
     printMap(lettersAndFreqs);
 
 
+    cout << endl << "part 1: 9 iterations" << endl;
+    part1(9);
+    cout << endl;
+
+    cout << endl << "part 1: 10 iterations" << endl;
+    part1(10);
+    cout << endl;
+
+    cout << endl << "part 1: 11 iterations" << endl;
+    part1(11);
+    cout << endl;
     return 14;
 }
 

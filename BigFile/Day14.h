@@ -26,8 +26,8 @@ private:
     map<string, map<string, long long unsigned int>> pairWithPairsAndFreqsAfterIter;
     map<string, unsigned long long int> pairsAndFreqOfTrueChain;
     map<string, unsigned long long int> lettersAndFreqs;
-    int numOfIterationsSmall = 10;
-    int numOfTotalIterations = 10;
+    int numOfIterationsSmall = 5;
+    int numOfTotalIterations = 40;
     //  original Pair : (otherPairs : numOfTimes)
 
 public:
@@ -57,6 +57,8 @@ public:
     void computeNumOfLetters();
 
     void populatePolyPairsAndMyPairs();
+
+    int part1(int numIt);
 };
 
 
