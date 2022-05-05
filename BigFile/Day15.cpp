@@ -21,6 +21,7 @@ void Day15::setMap(){
 }
 
 
+
 void Day15::printMap() {
     for (int i = 0; i < height; i++){
         for (int j = 0; j < width; j++){
@@ -44,7 +45,7 @@ int Day15::miniDist(int distance[], bool Tset[]){
 
 void Day15::dijkstraAlgo(vector<vector<int>> graph, int src){
     int distance[height]; // array to calculate the min distance for each node
-    bool Tset[height]; //bool array to makr visited and unvisted for each node
+    bool Tset[height]; //bool array to mark visited and unvisted for each node
     for (int k = 0; k < height; k++){
         distance[k] = INT_MAX;
         Tset[k] = false;
@@ -62,17 +63,27 @@ void Day15::dijkstraAlgo(vector<vector<int>> graph, int src){
         }
     }
 
+    cout << "sol" << endl;
+    printSolution(distance);
     int actMin = INT_MAX;
     for (int i = 0; i <height; i++){
-        cout << distance[i] << endl;
-        if (distance[i] < actMin) actMin = distance[i];
+        cout << endl << distance[i] << " ";
+        //if (distance[i] < actMin) actMin = distance[i];
     }
     cout << actMin << endl;
 
 }
 
+void Day15::printSolution(int dist[]) const
+{
+    cout <<"Vertex \t Distance from Source" << endl;
+    for (int i = 0; i < currSize; i++)
+        cout  << i << " \t\t"<<dist[i]<< endl;
+}
+
 int Day15::solve(){
     setMap();
+    printMap();
     dijkstraAlgo(map, 0);
     return 91;
 }

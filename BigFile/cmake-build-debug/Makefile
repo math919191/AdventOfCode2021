@@ -128,6 +128,30 @@ BigFile/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/build
 .PHONY : BigFile/fast
 
+Day14.obj: Day14.cpp.obj
+.PHONY : Day14.obj
+
+# target to build an object file
+Day14.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day14.cpp.obj
+.PHONY : Day14.cpp.obj
+
+Day14.i: Day14.cpp.i
+.PHONY : Day14.i
+
+# target to preprocess a source file
+Day14.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day14.cpp.i
+.PHONY : Day14.cpp.i
+
+Day14.s: Day14.cpp.s
+.PHONY : Day14.s
+
+# target to generate assembly for a file
+Day14.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day14.cpp.s
+.PHONY : Day14.cpp.s
+
 Day15.obj: Day15.cpp.obj
 .PHONY : Day15.obj
 
@@ -281,6 +305,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... BigFile
+	@echo ... Day14.obj
+	@echo ... Day14.i
+	@echo ... Day14.s
 	@echo ... Day15.obj
 	@echo ... Day15.i
 	@echo ... Day15.s

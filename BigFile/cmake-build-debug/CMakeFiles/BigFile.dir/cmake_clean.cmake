@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "BigFile.exe"
   "BigFile.exe.manifest"
   "BigFile.pdb"
+  "CMakeFiles/BigFile.dir/Day14.cpp.obj"
   "CMakeFiles/BigFile.dir/Day15.cpp.obj"
   "CMakeFiles/BigFile.dir/Day16.cpp.obj"
   "CMakeFiles/BigFile.dir/Day18.cpp.obj"

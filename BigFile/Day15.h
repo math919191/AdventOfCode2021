@@ -38,6 +38,8 @@ public:
     void dijkstraAlgo(vector<vector<int>> graph, int src);
 
     int miniDist(int *distance, bool *Tset);
+
+    void printSolution(int *dist) const;
 };
 
 
