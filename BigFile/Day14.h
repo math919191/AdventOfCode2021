@@ -59,6 +59,8 @@ public:
     void populatePolyPairsAndMyPairs();
 
     int part1(int numIt);
+
+    unsigned long long int computeAnswer();
 };
 
 

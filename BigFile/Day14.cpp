@@ -160,6 +160,34 @@ void Day14::populatePolyPairsAndMyPairs(){
 
 }
 
+
+unsigned long long int Day14::computeAnswer(){
+    unsigned long long int max = 0;
+    unsigned long long int min = INT_MAX;
+
+    string minLetter = "X";
+    string maxLetter = "X";
+
+    for (int i =0; i < myLetters.size(); i++ ){
+        unsigned long long int amount = lettersAndFreqs[myLetters.at(i)];
+        if (amount > max){
+            max = amount;
+            maxLetter = myLetters.at(i);
+
+        }
+        if (amount < min){
+            min = amount;
+            minLetter = myLetters.at(i);
+
+        }
+    }
+    cout << "MAX: " << maxLetter << ": " << max << endl;
+    cout << "MIN: " << minLetter << ": " << min << endl;
+    cout << "the answer is " << max - min << endl;
+    return max - min;
+
+}
+
 int Day14::solve(){
 
 
@@ -180,7 +208,6 @@ int Day14::solve(){
     //pairsAndFreqOfTrueChain is completely empty
 
     for (int i = 0; i < (numOfTotalIterations/numOfIterationsSmall); i++) { // the pairs freq map is after 10 iterations ==> 4*10 = 40
-
 
         map<string, unsigned long long int>::iterator it = pairsAndFreqOfTrueChain.begin();
         // Iterate over the map using Iterator till end.
@@ -218,24 +245,18 @@ int Day14::solve(){
 
     computeNumOfLetters();
 
-    printMap(origMap);
-
+//    printMap(origMap);
 
     cout << endl << "letters and counts: " << endl;
     printMap(lettersAndFreqs);
 
+    computeAnswer();
+    //The subtracting of the large numbers was being finickly, I had to copy and paste the largest and smallest numbers
+    // and then subtract those.
+    // the answer is 3459174981021!!
 
-    cout << endl << "part 1: 9 iterations" << endl;
-    part1(9);
-    cout << endl;
 
-    cout << endl << "part 1: 10 iterations" << endl;
-    part1(10);
-    cout << endl;
 
-    cout << endl << "part 1: 11 iterations" << endl;
-    part1(11);
-    cout << endl;
     return 14;
 }
 
