@@ -20,7 +20,6 @@ CMakeFiles/BigFile.dir/boilerplate.cpp.obj: \
  ../boilerplate.cpp \
  ../boilerplate.h
 CMakeFiles/BigFile.dir/main.cpp.obj: \
- ../Day14.h \
  ../Day15.h \
  ../Day16.h \
  ../Day18.h \

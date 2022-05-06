@@ -9,7 +9,7 @@
 #include <vector>
 #include <cmath>
 using namespace std;
-
+#define V 9 //num of vertices
 
 #ifndef BIGFILE_DAY21_H
 #define BIGFILE_DAY21_H
@@ -17,7 +17,8 @@ using namespace std;
 
 class Day15 {
 private:
-    vector<vector<int>> map;
+//    vector<vector<int>> map;
+    int map[V][V];
     int currSize = 0;
     int width = 0;
     int height = 0;
@@ -35,11 +36,12 @@ public:
     void setMap();
 
 
-    void dijkstraAlgo(vector<vector<int>> graph, int src);
+    int minDistance(int *distance, bool *sptSet);
 
-    int miniDist(int *distance, bool *Tset);
 
-    void printSolution(int *dist) const;
+    void dijkstra(int graph[V][V], int src);
+    void printSolution(int dist[]) const;
+
 };
 
 
