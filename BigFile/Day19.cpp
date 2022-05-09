@@ -163,6 +163,34 @@ vector<int> Day19::diffInCoor(vector<int> coor1, vector<int> coor2 ){
             coor1[2] - coor2[2] };
 }
 
+int Day19::numOfSameRelativeDistances(vector<vector<int>> scanner1, vector<vector<int>> scanner2){
+    vector<vector<int>> differences;
+    for (int i = 0; i < scanner2.size(); i++){
+        for (int j = 0; j < scanner1.size(); j++){
+            differences.push_back(diffInCoor(scanner1.at(j), scanner2.at(i)));
+        }
+    }
+
+    int maxNumSame = 0;
+    for (int i = 0; i < differences.size(); i++){
+        vector<int> currCoor = differences.at(i);
+        int numSame = 0;
+        for (int j = i; j < differences.size(); j++){
+            if (currCoor == differences.at(j)) numSame++;
+
+            if (numSame > maxNumSame) maxNumSame = numSame;
+            if (numSame > 11){
+                cout << "success!!" << endl;
+                cout << currCoor.at(0) << " " << currCoor.at(1) << " " << currCoor.at(2) << endl;
+            }
+        }
+    }
+
+    return maxNumSame;
+
+}
+
+
 vector<int> Day19::findRelativeCenter(vector<vector<int>> &scanner) {
 
     int numOver = findNumOverlappingBeacons(scanner, scanner0);
@@ -190,6 +218,9 @@ vector<int> Day19::findRelativeCenter(vector<vector<int>> &scanner) {
             int numOver2 = findNumOverlappingBeacons(scannerAdj, scanner0);
             if (numOver2 > 11) {
                 cout << "got it!!" << endl;
+                int myNum = numOfSameRelativeDistances(scannerAdj, scanner0);
+                int myNum2 = numOfSameRelativeDistances(newScannerAdj, scanner0);
+                cout << myNum << myNum2 << endl;
                 return {68, -1246, -43};
             }
         }
@@ -211,8 +242,26 @@ int Day19::solve(){
     //cout << findNumOverlappingBeacons(scanner, newscanner) << endl;
 
     findRelativeCenter(scanner1);
+    //68 -1246 -43
+
+//    for (int k = 0; k < 24; k++){
+//        scanner1 = adjustOrientation(scanner1, k);
+//        for (int i = 0; i < scanner0.size(); i++){
+//            for (int j = 0; j < scanner1.size(); j++){
+//                vector<int> coor = diffInCoor(scanner1.at(j), scanner0.at(i));
+//                cout << coor[0] << " " << coor[1] << " " << coor[2] << " " << endl;
+//            }
+//        }
+//    }
 
     //cout << newscanner[0][0] << endl;
+
+    cout << "trying 1 and 4" << endl;
+    for (int i = 0; i < 24; i++){
+        vector<vector<int>> newScannerAdj = adjustOrientation(coordinates.at(4), i);
+
+        cout << numOfSameRelativeDistances(coordinates.at(1), newScannerAdj) << endl;
+    }
 
     cout << "here" << endl;
 

@@ -53,6 +53,7 @@ public:
 
 
         }
+        coordinates.push_back(scannerWithCoors);
         scanner0 = coordinates.at(0);
     }
 
@@ -81,6 +82,8 @@ public:
     vector<vector<int>> adjustPosition(vector<vector<int>> scanner, int xAdj, int yAdj, int zAdj);
 
     vector<int> diffInCoor(vector<int> coor1, vector<int> coor2);
+
+    int numOfSameRelativeDistances(vector<vector<int>> scanner1, vector<vector<int>> scanner2);
 };
 
 
