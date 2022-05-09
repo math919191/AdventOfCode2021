@@ -84,11 +84,11 @@ ad */
 
 vector<int> Day19::changeSingleCoorOrientation(vector<int> coor, int whichIteration){
     vector<vector<int>> possibilitiesOfCoor;
-
+    vector<int> origCoor = coor;
     vector<int> newCoor;
     int var = 0;
-    for (int q = 0; q < 3; q++) {
-
+    for (int q = 0; q < 6; q++) {
+//        cout << endl << "q is " << q << endl;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
                 for (int k = 0; k < 2; k++) {
@@ -105,21 +105,51 @@ vector<int> Day19::changeSingleCoorOrientation(vector<int> coor, int whichIterat
                     if (whichIteration == var){
                         return newCoor;
                     }
+                    //cout << newCoor[0] << " " << newCoor[1] << " " << newCoor[2] << endl;
                     newCoor.clear();
                     var++;
 
                 }
             }
         }
-        //shifting coordinates
-        int x = coor[0];
-        int y = coor[1];
-        int z = coor[2];
-        coor[0] = y;
-        coor[1] = z;
-        coor[2] = x;
+        if (q < 3){
+            //shifting coordinates
+            int x = coor[0];
+            int y = coor[1];
+            int z = coor[2];
+            coor[0] = y;
+            coor[1] = z;
+            coor[2] = x;
+        }
+        if (q == 2) {
+            int x = origCoor[0];
+            int y = origCoor[1];
+            int z = origCoor[2];
+            coor[0] = x;
+            coor[1] = z;
+            coor[2] = y;
+        } else if (q == 3) {
+            int x = origCoor[0];
+            int y = origCoor[1];
+            int z = origCoor[2];
+            coor[0] = z;
+            coor[1] = y;
+            coor[2] = x;
+        } else if (q == 4) {
+            int x = origCoor[0];
+            int y = origCoor[1];
+            int z = origCoor[2];
+            coor[0] = y;
+            coor[1] = x;
+            coor[2] = z;
+        }
     }
-
+    // 1 2 3
+    // 2 3 1
+    // 3 1 2
+    // 1 3 2
+    // 3 2 1
+    // 2 1 3
     return newCoor;
 
     //return possibilitiesOfCoor;
@@ -182,6 +212,8 @@ int Day19::numOfSameRelativeDistances(vector<vector<int>> scanner1, vector<vecto
             if (numSame > 11){
                 cout << "success!!" << endl;
                 cout << currCoor.at(0) << " " << currCoor.at(1) << " " << currCoor.at(2) << endl;
+                return numSame;
+                break;
             }
         }
     }
@@ -201,16 +233,16 @@ vector<int> Day19::findRelativeCenter(vector<vector<int>> &scanner) {
     vector<int> potentionalAdjusts = diffInCoor(scanner.at(0), scanner0.at(0));
     int iter = 0;
     //while (true) {
-//        int xAdj = potentionalAdjusts[0];
-//        int yAdj = potentionalAdjusts[1];
-//        int zAdj = potentionalAdjusts[2];
-//
-        int xAdj = 68;
-        int yAdj = -1246;
-        int zAdj = -43;
+        int xAdj = potentionalAdjusts[0];
+        int yAdj = potentionalAdjusts[1];
+        int zAdj = potentionalAdjusts[2];
+
+//        int xAdj = 68;
+//        int yAdj = -1246;
+//        int zAdj = -43;
 
         cout << xAdj << " " << yAdj << " " << zAdj << endl;
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 48; i++) {
 
             vector<vector<int>> newScannerAdj = adjustOrientation(scanner, i);
             scannerAdj = adjustPosition(newScannerAdj, xAdj, yAdj, zAdj);
@@ -231,18 +263,39 @@ vector<int> Day19::findRelativeCenter(vector<vector<int>> &scanner) {
     return {1, 2, 3};
 }
 
+vector<int> Day19::actualRelativeCenter(int scannerNum){
+    int orientation = -1;
+    int overlappingScanner = -1;
+    for (int k = 0; k < coordinates.size(); k++){ //k is what scanner we are comparing
+        if (k != scannerNum){
+            for (int i = 0; i < 48; i++){
+                vector<vector<int>> newScannerAdj = adjustOrientation(coordinates.at(scannerNum), i);
+                int same = numOfSameRelativeDistances(coordinates.at(k), newScannerAdj);
+                if (same > 11){
+                    orientation = i;
+
+                    overlappingScanner = k;
+                    cout << "overlapped with " << overlappingScanner << endl;
+                    cout << endl;
+                    break;
+                }
+            }
+
+
+        }
+    }
+
+    return {1,2,3};
+}
 
 int Day19::solve(){
-    //setMap();
-    //printMap();
     vector<vector<int>> scanner1 = coordinates.at(1);
-
-    //vector<vector<vector<int>>> scanner0Poss = generateAllPossibilites(scanner);
-    //vector<vector<int>> newscanner = adjustOrientation(scanner, 0);
-    //cout << findNumOverlappingBeacons(scanner, newscanner) << endl;
-
-    findRelativeCenter(scanner1);
-    //68 -1246 -43
+//    changeSingleCoorOrientation({1,2,3}, 47);
+    for (int i = 1; i < 5; i++){
+        cout << endl << endl << i << ":" <<endl;
+        actualRelativeCenter(i);
+    }
+    //findRelativeCenter(scanner1);
 
 //    for (int k = 0; k < 24; k++){
 //        scanner1 = adjustOrientation(scanner1, k);
@@ -254,16 +307,15 @@ int Day19::solve(){
 //        }
 //    }
 
-    //cout << newscanner[0][0] << endl;
-
-    cout << "trying 1 and 4" << endl;
-    for (int i = 0; i < 24; i++){
-        vector<vector<int>> newScannerAdj = adjustOrientation(coordinates.at(4), i);
-
-        cout << numOfSameRelativeDistances(coordinates.at(1), newScannerAdj) << endl;
-    }
-
-    cout << "here" << endl;
+//    cout << "trying 4 and other" << endl;
+//    for (int k = 0; k < 5; k++){
+//        for (int i = 0; i < 24; i++){
+//            vector<vector<int>> newScannerAdj = adjustOrientation(coordinates.at(3), i);
+//            numOfSameRelativeDistances(coordinates.at(k), newScannerAdj);
+//        }
+//    }
+//
+//    cout << "here" << endl;
 
     return 19;
 }

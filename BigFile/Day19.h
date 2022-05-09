@@ -84,6 +84,10 @@ public:
     vector<int> diffInCoor(vector<int> coor1, vector<int> coor2);
 
     int numOfSameRelativeDistances(vector<vector<int>> scanner1, vector<vector<int>> scanner2);
+
+    vector<int> actualRelativeCenter(vector<vector<int>> scanner);
+
+    vector<int> actualRelativeCenter(int scannerNum);
 };
 
 
