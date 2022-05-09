@@ -17,6 +17,11 @@ class Day19 {
 private:
     vector<vector<vector<int>>> coordinates;
     vector<vector<int>> scanner0;
+    vector<vector<int>> scannerRelativePosToOtherScanner;
+    // x y z scannerNum relativeScannerNum
+    vector<vector<int>> scannerRealtivePosToScanner0;
+
+
     //static vector<vector<vector<bool>>> map;
     //static bool map[1900][1999][1999];
 
@@ -88,6 +93,8 @@ public:
     vector<int> actualRelativeCenter(vector<vector<int>> scanner);
 
     vector<int> actualRelativeCenter(int scannerNum);
+
+    vector<int> giveCoorDifferencesBasedOnRelativeDistance(vector<vector<int>> scanner1, vector<vector<int>> scanner2);
 };
 
 

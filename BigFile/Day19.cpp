@@ -195,6 +195,7 @@ vector<int> Day19::diffInCoor(vector<int> coor1, vector<int> coor2 ){
 
 int Day19::numOfSameRelativeDistances(vector<vector<int>> scanner1, vector<vector<int>> scanner2){
     vector<vector<int>> differences;
+
     for (int i = 0; i < scanner2.size(); i++){
         for (int j = 0; j < scanner1.size(); j++){
             differences.push_back(diffInCoor(scanner1.at(j), scanner2.at(i)));
@@ -210,17 +211,41 @@ int Day19::numOfSameRelativeDistances(vector<vector<int>> scanner1, vector<vecto
 
             if (numSame > maxNumSame) maxNumSame = numSame;
             if (numSame > 11){
-                cout << "success!!" << endl;
-                cout << currCoor.at(0) << " " << currCoor.at(1) << " " << currCoor.at(2) << endl;
+                //cout << "success!!" << endl;
+                //cout << currCoor.at(0) << " " << currCoor.at(1) << " " << currCoor.at(2) << endl;
                 return numSame;
                 break;
             }
         }
     }
-
     return maxNumSame;
-
 }
+
+vector<int> Day19::giveCoorDifferencesBasedOnRelativeDistance(vector<vector<int>> scanner1, vector<vector<int>> scanner2){
+    vector<vector<int>> differences;
+
+    for (int i = 0; i < scanner2.size(); i++){
+        for (int j = 0; j < scanner1.size(); j++){
+            differences.push_back(diffInCoor(scanner1.at(j), scanner2.at(i)));
+        }
+    }
+
+    int maxNumSame = 0;
+    for (int i = 0; i < differences.size(); i++){
+        vector<int> currCoor = differences.at(i);
+        int numSame = 0;
+        for (int j = i; j < differences.size(); j++){
+            if (currCoor == differences.at(j)) numSame++;
+            if (numSame > maxNumSame) maxNumSame = numSame;
+            if (numSame > 11){
+                return currCoor;
+                break;
+            }
+        }
+    }
+    return {0,0,0};
+}
+
 
 
 vector<int> Day19::findRelativeCenter(vector<vector<int>> &scanner) {
@@ -273,10 +298,15 @@ vector<int> Day19::actualRelativeCenter(int scannerNum){
                 int same = numOfSameRelativeDistances(coordinates.at(k), newScannerAdj);
                 if (same > 11){
                     orientation = i;
-
                     overlappingScanner = k;
-                    cout << "overlapped with " << overlappingScanner << endl;
-                    cout << endl;
+//                    cout << "overlapped with " << overlappingScanner << endl;
+                    vector<int> coord = giveCoorDifferencesBasedOnRelativeDistance(coordinates.at(k), newScannerAdj);
+                    coord.push_back(scannerNum);
+                    coord.push_back(k);
+
+                    scannerRelativePosToOtherScanner.push_back(coord);
+
+//                    cout << endl;
                     break;
                 }
             }
@@ -292,8 +322,15 @@ int Day19::solve(){
     vector<vector<int>> scanner1 = coordinates.at(1);
 //    changeSingleCoorOrientation({1,2,3}, 47);
     for (int i = 1; i < 5; i++){
-        cout << endl << endl << i << ":" <<endl;
+//        cout << endl << endl << i << ":" <<endl;
         actualRelativeCenter(i);
+    }
+
+    for (int i = 0; i < scannerRelativePosToOtherScanner.size(); i++){
+        cout << "Scanner "<< scannerRelativePosToOtherScanner[i][3] << " relative to " << scannerRelativePosToOtherScanner[i][4] << endl;
+        cout << scannerRelativePosToOtherScanner[i][0] << " " <<
+                scannerRelativePosToOtherScanner[i][1] << " " <<
+                scannerRelativePosToOtherScanner[i][2] << " " << endl;
     }
     //findRelativeCenter(scanner1);
 
