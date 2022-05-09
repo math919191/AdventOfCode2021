@@ -224,6 +224,30 @@ Day18.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day18.cpp.s
 .PHONY : Day18.cpp.s
 
+Day19.obj: Day19.cpp.obj
+.PHONY : Day19.obj
+
+# target to build an object file
+Day19.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day19.cpp.obj
+.PHONY : Day19.cpp.obj
+
+Day19.i: Day19.cpp.i
+.PHONY : Day19.i
+
+# target to preprocess a source file
+Day19.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day19.cpp.i
+.PHONY : Day19.cpp.i
+
+Day19.s: Day19.cpp.s
+.PHONY : Day19.s
+
+# target to generate assembly for a file
+Day19.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day19.cpp.s
+.PHONY : Day19.cpp.s
+
 Day20.obj: Day20.cpp.obj
 .PHONY : Day20.obj
 
@@ -317,6 +341,9 @@ help:
 	@echo ... Day18.obj
 	@echo ... Day18.i
 	@echo ... Day18.s
+	@echo ... Day19.obj
+	@echo ... Day19.i
+	@echo ... Day19.s
 	@echo ... Day20.obj
 	@echo ... Day20.i
 	@echo ... Day20.s

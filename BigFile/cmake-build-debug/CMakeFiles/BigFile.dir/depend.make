@@ -13,6 +13,9 @@ CMakeFiles/BigFile.dir/Day16.cpp.obj: \
 CMakeFiles/BigFile.dir/Day18.cpp.obj: \
  ../Day18.cpp \
  ../Day18.h
+CMakeFiles/BigFile.dir/Day19.cpp.obj: \
+ ../Day19.cpp \
+ ../Day19.h
 CMakeFiles/BigFile.dir/Day20.cpp.obj: \
  ../Day20.cpp \
  ../Day20.h
@@ -20,8 +23,5 @@ CMakeFiles/BigFile.dir/boilerplate.cpp.obj: \
  ../boilerplate.cpp \
  ../boilerplate.h
 CMakeFiles/BigFile.dir/main.cpp.obj: \
- ../Day15.h \
- ../Day16.h \
- ../Day18.h \
- ../Day20.h \
+ ../Day19.h \
  ../main.cpp
