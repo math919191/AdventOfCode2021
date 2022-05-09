@@ -16,7 +16,8 @@ using namespace std;
 class Day19 {
 private:
     vector<vector<vector<int>>> coordinates;
-    static vector<vector<vector<bool>>> map;
+    vector<vector<int>> scanner0;
+    //static vector<vector<vector<bool>>> map;
     //static bool map[1900][1999][1999];
 
 
@@ -52,21 +53,34 @@ public:
 
 
         }
+        scanner0 = coordinates.at(0);
     }
 
     int solve();
 
-    void setMap();
+//    void setMap();
+//
+//    void set(int x, int y, int z, bool toWhat);
+//
+//    void printMap();
 
-    void set(int x, int y, int z, bool toWhat);
+    vector<int> findRelativeCenter(vector<vector<int>> &scanner);
 
-    void printMap();
+    //vector<vector<int>> changeScannerOrientation(vector<vector<int>> scanner);
 
-    vector<int> findRelativeCenter(vector<vector<int>> scanner);
+    //vector<vector<vector<int>>> generateAllPossibilites(vector<vector<int>> &scanner);
 
-    vector<vector<int>> changeScannerOrientation(vector<vector<int>> scanner);
+    vector<int> changeSingleCoorOrientation(vector<int> coor, int whichIteration);
 
-    vector<int> changeSingleCoorOrientation(vector<int> coor);
+    vector<vector<int>> adjustOrientation(vector<vector<int>> scanner, int whatIter);
+
+    int findNumOverlappingBeacons(vector<vector<int>> scanner1, vector<vector<int>> scanner2);
+
+    bool coorInOtherScanner(vector<int> coor, vector<vector<int>> scanner);
+
+    vector<vector<int>> adjustPosition(vector<vector<int>> scanner, int xAdj, int yAdj, int zAdj);
+
+    vector<int> diffInCoor(vector<int> coor1, vector<int> coor2);
 };
 
 

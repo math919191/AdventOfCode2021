@@ -49,18 +49,68 @@
 ad */
 
 
-vector<vector<vector<int>>> Day19::generateAllPossibilites(vector<vector<int>> scanner){
-    vector<vector<vector<int>>> possibilities;
-    for (int i = 0; i < 24; i++){
-        vector<vector<int>> newCoors;
-        possibilities[i] = newCoors;
-    }
-}
 
-vector<int> Day19::changeSingleCoorOrientation(vector<int> coor){
+//vector<vector<int>> Day19::changeScannerOrientation(vector<vector<int>> scanner){
+//
+//    vector<vector<int>> newScanner;
+//    return scanner;
+//
+//
+//}
+//
+//
+//vector<int> Day19::findRelativeCenter(vector<vector<int>> scanner){
+//    return {1,2,3};
+//}
+//
+//vector<vector<vector<int>>> Day19::generateAllPossibilites(vector<vector<int>> &scanner){
+//    int numOfBeacons = scanner.size();
+//    int possibilities[24][numOfBeacons][3];
+//    vector<vector<vector<int>>> possibilities2;
+//    vector<int> test;
+//    // [24][25][3]
+//    for (int i = 0; i < scanner.size(); i++){
+//        vector<vector<int>> possibilitiesOfCoor = changeSingleCoorOrientation(scanner.at(i));
+//        for (int j = 0; j < 24; j++){
+//            vector<int> myCoor =  possibilitiesOfCoor[j];
+//
+//            possibilities[0][0][0] = 0;
+//            possibilities2[0][0][0] = 0;
+////            possibilities[j][i] = {1,2,3};
+//        }
+//    }
+//    return possibilities2;
+//}
 
+vector<int> Day19::changeSingleCoorOrientation(vector<int> coor, int whichIteration){
+    vector<vector<int>> possibilitiesOfCoor;
 
+    vector<int> newCoor;
+    int var = 0;
     for (int q = 0; q < 3; q++) {
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                for (int k = 0; k < 2; k++) {
+                    if (i == 0) newCoor.push_back(coor[0] * -1);
+                    else  newCoor.push_back(coor[0]);
+
+                    if (j == 0) newCoor.push_back(coor[1] * -1);
+                    else newCoor.push_back(coor[1]);
+
+                    if (k == 0) newCoor.push_back(coor[2] * -1);
+                    else newCoor.push_back(coor[2]);
+
+                    possibilitiesOfCoor.push_back(newCoor);
+                    if (whichIteration == var){
+                        return newCoor;
+                    }
+                    newCoor.clear();
+                    var++;
+
+                }
+            }
+        }
         //shifting coordinates
         int x = coor[0];
         int y = coor[1];
@@ -68,47 +118,103 @@ vector<int> Day19::changeSingleCoorOrientation(vector<int> coor){
         coor[0] = y;
         coor[1] = z;
         coor[2] = x;
-        cout << endl;
+    }
 
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                for (int k = 0; k < 2; k++) {
-                    if (i == 0) cout << coor[0] * -1 << ", ";
-                    else cout << coor[0] << ", ";
+    return newCoor;
 
-                    if (j == 0) cout << coor[1] * -1 << ", ";
-                    else cout << coor[1] << ", ";
+    //return possibilitiesOfCoor;
+}
 
-                    if (k == 0) cout << coor[2] * -1;
-                    else cout << coor[2];
+vector<vector<int>> Day19::adjustOrientation(vector<vector<int>> scanner, int whatIter){
+    vector<vector<int>> newScannerOrienation;
+    for (int i = 0; i < scanner.size(); i++){
+        newScannerOrienation.push_back(changeSingleCoorOrientation(scanner.at(i), whatIter));
+    }
+    return newScannerOrienation;
+}
 
-                    cout << endl;
-                }
+vector<vector<int>> Day19::adjustPosition(vector<vector<int>> scanner, int xAdj, int yAdj, int zAdj){
+    for (int i = 0; i < scanner.size(); i++){
+        scanner[i][0] = scanner[i][0] + xAdj;
+        scanner[i][1] = scanner[i][1] + yAdj;
+        scanner[i][2] = scanner[i][2] + zAdj;
+    }
+    return scanner;
+}
+
+bool Day19::coorInOtherScanner(vector<int> coor, vector<vector<int>> scanner){
+    for (int i = 0; i < scanner.size(); i++){
+        if (scanner.at(i) == coor) return true;
+    }
+    return false;
+}
+
+int Day19::findNumOverlappingBeacons(vector<vector<int>> scanner1, vector<vector<int>> scanner2){
+    int sameBeacons = 0;
+    for (int i = 0; i < scanner1.size(); i++){
+        if (coorInOtherScanner(scanner1.at(i), scanner2)) sameBeacons++;
+    }
+    return sameBeacons;
+}
+
+vector<int> Day19::diffInCoor(vector<int> coor1, vector<int> coor2 ){
+    return {coor1[0] - coor2[0],
+            coor1[1] - coor2[1],
+            coor1[2] - coor2[2] };
+}
+
+vector<int> Day19::findRelativeCenter(vector<vector<int>> &scanner) {
+
+    int numOver = findNumOverlappingBeacons(scanner, scanner0);
+    if ( numOver > 11){
+        return {0,0,0};
+    }
+    vector<vector<int>> scannerAdj;
+    vector<int> potentionalAdjusts = diffInCoor(scanner.at(0), scanner0.at(0));
+    int iter = 0;
+    //while (true) {
+//        int xAdj = potentionalAdjusts[0];
+//        int yAdj = potentionalAdjusts[1];
+//        int zAdj = potentionalAdjusts[2];
+//
+        int xAdj = 68;
+        int yAdj = -1246;
+        int zAdj = -43;
+
+        cout << xAdj << " " << yAdj << " " << zAdj << endl;
+        for (int i = 0; i < 24; i++) {
+
+            vector<vector<int>> newScannerAdj = adjustOrientation(scanner, i);
+            scannerAdj = adjustPosition(newScannerAdj, xAdj, yAdj, zAdj);
+
+            int numOver2 = findNumOverlappingBeacons(scannerAdj, scanner0);
+            if (numOver2 > 11) {
+                cout << "got it!!" << endl;
+                return {68, -1246, -43};
             }
         }
-    }
-    return coor;
+        iter++;
+        potentionalAdjusts = diffInCoor(scanner.at(iter), scanner0.at(0));
+    //}
+
+    return {1, 2, 3};
 }
 
-vector<vector<int>> Day19::changeScannerOrientation(vector<vector<int>> scanner){
-
-    vector<vector<int>> newScanner;
-    return scanner;
-
-
-}
-
-
-vector<int> Day19::findRelativeCenter(vector<vector<int>> scanner){
-    return {1,2,3};
-}
 
 int Day19::solve(){
     //setMap();
     //printMap();
-    changeSingleCoorOrientation({1,2,3});
+    vector<vector<int>> scanner1 = coordinates.at(1);
 
+    //vector<vector<vector<int>>> scanner0Poss = generateAllPossibilites(scanner);
+    //vector<vector<int>> newscanner = adjustOrientation(scanner, 0);
+    //cout << findNumOverlappingBeacons(scanner, newscanner) << endl;
 
+    findRelativeCenter(scanner1);
 
-        return 19;
+    //cout << newscanner[0][0] << endl;
+
+    cout << "here" << endl;
+
+    return 19;
 }
