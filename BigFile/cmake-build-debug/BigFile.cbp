@@ -116,6 +116,12 @@
 		<Unit filename="C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day20.h">
 			<Option target="BigFile"/>
 		</Unit>
+		<Unit filename="C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day25.cpp">
+			<Option target="BigFile"/>
+		</Unit>
+		<Unit filename="C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day25.h">
+			<Option target="BigFile"/>
+		</Unit>
 		<Unit filename="C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/boilerplate.cpp">
 			<Option target="BigFile"/>
 		</Unit>

@@ -532,7 +532,7 @@ int Day19::countNonDuplicates(){
 int Day19::solve(){
 
 
-    cout << addAllBeacons() << endl;
+    //cout << addAllBeacons() << endl;
 //    vector<vector<int>> scanner1 = coordinates.at(1);
 //
 //    for (int i = 0; i < 48; i++){
@@ -540,9 +540,19 @@ int Day19::solve(){
 //        cout << i << ": "<< coor[0] << "," << coor[1] << "," << coor[2] << "," << endl;
 //    }
 //
-//    for (int i = 1; i < 5; i++){
-//        actualRelativeCenter(i);
-//    }
+    for (int i = 1; i < coordinates.size(); i++){
+        actualRelativeCenter(i);
+
+
+        cout << "Scanner " << scannerRelativePosToOtherScanner[i][3] << " relative to "
+             << scannerRelativePosToOtherScanner[i][4] << " orientation of " << scannerRelativePosToOtherScanner[i][5]
+             << endl;
+        cout << scannerRelativePosToOtherScanner[i][0] << " " <<
+             scannerRelativePosToOtherScanner[i][1] << " " <<
+             scannerRelativePosToOtherScanner[i][2] << " " << endl;
+
+    }
+    cout << goingThroughGeneratedListOfCoorsAndRelScanner() << endl;
 //
 //    for (int i = 0; i < scannerRelativePosToOtherScanner.size(); i++) {
 //        cout << "Scanner " << scannerRelativePosToOtherScanner[i][3] << " relative to "
