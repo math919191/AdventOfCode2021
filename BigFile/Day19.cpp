@@ -398,6 +398,8 @@ vector<int> Day19::findOrientationAndRelPosWithListOfCoor(vector<vector<int>> sc
 
 }
 
+
+
 int Day19::addAllBeacons(){
     //add beacon 0
     int numScanners = coordinates.size();
@@ -406,35 +408,47 @@ int Day19::addAllBeacons(){
     }
     successfulScanners.push_back(0);
     int i = 0;
+    int numberOfTimesThrough = 0;
     while (!checkIfAllScannersAdded()){
-        i++;
-        i = i % numScanners;
-        if (checkIfScannerAdded(i)) continue; // if it's already there, then keep going
-        vector<vector<int>> currScanner = coordinates.at(i);
-        vector<int> coors = findOrientationAndRelPosWithListOfCoor(currScanner, i);
-        if (coors.size() > 1){
-            cout << "before adjustment" << endl;
-            printScannerInOrder(currScanner);
-
-            currScanner = adjustScannerOrientation(currScanner, coors.at(4));
-            cout << endl << "orientation adjustment " << endl;
-            printScannerInOrder(currScanner);
-
-            currScanner = adjustPosition(currScanner, coors.at(0)*-1, coors.at(1)*-1, coors.at(2)*-1 );
-            cout << endl << "after pos adjustment " << endl;
-            printScannerInOrder(currScanner);
-
-            for (int j = 0; j < currScanner.size(); j++){
-                addBeacon(currScanner.at(j));
+        cout << i << endl;
+//        i++;
+//        i = i % numScanners;
+        if (numberOfTimesThrough < orderOfScannerstoBeAdded.size()){
+            i = orderOfScannerstoBeAdded.at(numberOfTimesThrough);
+            numberOfTimesThrough++;
+        } else {
+            if (numberOfTimesThrough == orderOfScannerstoBeAdded.size()){
+                i = 0;
             }
-            successfulScanners.push_back(i);
-            cout << "added scanner #" << i << endl;
-            cout << allCoorRelTo0.size() << endl;
+            numberOfTimesThrough++;
+            //cout << i << endl;
+            i++;
+            i = i % numScanners;
         }
 
-        //        vector<int> currScannerPosAndInfo = scannerRelativePosToOtherScanner.at(i);
+        if (checkIfScannerAdded(i)) { // if it's already there, then keep going
+            //do nothing
+        } else {
+            vector<vector<int>> currScanner = coordinates.at(i);
+            vector<int> coors = findOrientationAndRelPosWithListOfCoor(currScanner, i);
+            if (coors.size() > 1){
+
+                currScanner = adjustScannerOrientation(currScanner, coors.at(4));
+
+                currScanner = adjustPosition(currScanner, coors.at(0)*-1, coors.at(1)*-1, coors.at(2)*-1 );
+
+                for (int j = 0; j < currScanner.size(); j++){
+                    addBeacon(currScanner.at(j));
+                }
+                successfulScanners.push_back(i);
+                cout << "added scanner #" << i << endl;
+                cout << allCoorRelTo0.size() << endl;
+            }
+
+            //        vector<int> currScannerPosAndInfo = scannerRelativePosToOtherScanner.at(i);
 
 
+        }
     }
 
 
@@ -444,6 +458,76 @@ int Day19::addAllBeacons(){
     return allCoorRelTo0.size();
 }
 
+
+
+int Day19::goingThroughGeneratedListOfCoorsAndRelScanner(){
+    vector<int> scannersThatAreDone;
+    vector<vector<int>> scannersCoorsThatNeedDoneAgain;
+    for (int i = 0; i < scannerRelativePosToOtherScanner.size(); i++) {
+        vector<int> currCoors = scannerRelativePosToOtherScanner[i];
+
+        cout << "Scanner " << scannerRelativePosToOtherScanner[i][3] << " relative to "
+             << scannerRelativePosToOtherScanner[i][4] << " orientation of " << scannerRelativePosToOtherScanner[i][5]
+             << endl;
+        cout << scannerRelativePosToOtherScanner[i][0] << " " <<
+             scannerRelativePosToOtherScanner[i][1] << " " <<
+             scannerRelativePosToOtherScanner[i][2] << " " << endl;
+
+        vector<vector<int>> currScanner = coordinates.at(currCoors[3]);
+
+        currScanner = adjustScannerOrientation(currScanner, currCoors.at(5));
+        currScanner = adjustPosition(currScanner, currCoors.at(0)*-1, currCoors.at(1)*-1, currCoors.at(2)*-1 );
+
+        for (int i = 0; i < currScanner.size(); i++){
+             coordinates.at(currCoors.at(4)).push_back(currScanner.at(i));
+        }
+        if (currCoors[4] != 0) {
+            scannersCoorsThatNeedDoneAgain.push_back(scannerRelativePosToOtherScanner.at(currCoors[4]));
+        }
+        scannersThatAreDone.push_back(currCoors[3]);
+    }
+
+    int k = 0;
+    while (scannersCoorsThatNeedDoneAgain.size() != k){
+        vector<int> currCoors = scannersCoorsThatNeedDoneAgain[k];
+        vector<vector<int>> currScanner = coordinates.at(currCoors[3]);
+
+        currScanner = adjustScannerOrientation(currScanner, currCoors.at(5));
+        currScanner = adjustPosition(currScanner, currCoors.at(0)*-1, currCoors.at(1)*-1, currCoors.at(2)*-1 );
+
+        for (int i = 0; i < currScanner.size(); i++){
+            coordinates.at(currCoors.at(4)).push_back(currScanner.at(i));
+        }
+        if (currCoors[4] != 0) {
+            scannersCoorsThatNeedDoneAgain.push_back(scannerRelativePosToOtherScanner.at(currCoors[4]));
+        }
+        scannersThatAreDone.push_back(currCoors[3]);
+
+//        scannersCoorsThatNeedDoneAgain.erase(scannersCoorsThatNeedDoneAgain.begin()+3, 1)
+
+        k++;
+    }
+    return countNonDuplicates();
+}
+
+bool Day19::checkIfNotDuplicate(vector<vector<int>> nonDuplicates, vector<int> coor){
+    for (int i = 0; i < nonDuplicates.size(); i++){
+        if (nonDuplicates.at(i) == coor) return false;
+    }
+    return true;
+}
+
+int Day19::countNonDuplicates(){
+    vector<vector<int>> coordinates0 = coordinates.at(0);
+    vector<vector<int>> nonDuplicates;
+
+    for (int i = 0; i < coordinates0.size(); i++){
+        if (checkIfNotDuplicate(nonDuplicates, coordinates0.at(i))){
+            nonDuplicates.push_back(coordinates0.at(i));
+        }
+    }
+    return nonDuplicates.size();
+}
 
 int Day19::solve(){
 
@@ -469,6 +553,7 @@ int Day19::solve(){
 //             scannerRelativePosToOtherScanner[i][2] << " " << endl;
 //
 //    }
-
+    //450 too high
+    //305 too low
     return 19;
 }
