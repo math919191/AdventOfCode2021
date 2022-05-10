@@ -82,6 +82,65 @@ ad */
 //    return possibilities2;
 //}
 
+
+/*
+ *
+0: 1,2,3,
+1: -1,2,3,
+2: 1,-2,3,
+3: 1,2,-3,
+4: -1,-2,3,
+5: 1,-2,-3,
+6: -1,2,-3,
+7: -1,-2,-3,
+8: 2,3,1,
+9: -2,3,1,
+10: 2,-3,1,
+11: 2,3,-1,
+12: -2,-3,1,
+13: 2,-3,-1,
+14: -2,3,-1,
+15: -2,-3,-1,
+16: 3,1,2,
+17: -3,1,2,
+18: 3,-1,2,
+19: 3,1,-2,
+20: -3,-1,2,
+21: 3,-1,-2,
+22: -3,1,-2,
+23: -3,-1,-2,
+24: 1,3,2,
+25: -1,3,2,
+26: 1,-3,2,
+27: 1,3,-2,
+28: -1,-3,2,
+29: 1,-3,-2,
+30: -1,3,-2,
+31: -1,-3,-2,
+32: 3,2,1,
+33: -3,2,1,
+34: 3,-2,1,
+35: 3,2,-1,
+36: -3,-2,1,
+37: 3,-2,-1,
+38: -3,2,-1,
+39: -3,-2,-1,
+40: 2,1,3,
+41: -2,1,3,
+42: 2,-1,3,
+43: 2,1,-3,
+44: -2,-1,3,
+45: 2,-1,-3,
+46: -2,1,-3,
+47: -2,-1,-3,
+ * */
+
+void printScannerInOrder(vector<vector<int>> scanner){
+    for (int i = 0; i < scanner.size(); i++){
+        cout << scanner[i][0] << " " << scanner[i][1] << " " << scanner[i][2] << " " << endl;
+    }
+}
+
 int determineSwitch(int iteration){
     if (iteration < 8) return 0;
     if (iteration < 16) return 1;
@@ -283,7 +342,7 @@ vector<int> Day19::actualRelativeCenter(int scannerNum){
     int overlappingScanner = -1;
     for (int k = 0; k < coordinates.size(); k++){ //k is what scanner we are comparing
         if (k != scannerNum){  //don't compare it to itself
-            for (int i = 0; i < 48; i++){
+            for (int i = 0; i < 48; i++){ // try all the orientations
                 vector<vector<int>> newScannerAdj = adjustScannerOrientation(coordinates.at(scannerNum), i);
                 int same = numOfSameRelativeDistances(coordinates.at(k), newScannerAdj);
                 if (same > 11){
@@ -291,11 +350,11 @@ vector<int> Day19::actualRelativeCenter(int scannerNum){
                     overlappingScanner = k;
                     vector<int> coord = giveCoorDifferencesBasedOnRelativeDistance(coordinates.at(k), newScannerAdj);
                     coord.push_back(scannerNum);
-                    coord.push_back(k);
+                    coord.push_back(overlappingScanner);
+                    coord.push_back(orientation);
 
                     scannerRelativePosToOtherScanner.push_back(coord);
-
-//                    cout << endl;
+                    return coord;
                     break;
                 }
             }
@@ -304,52 +363,112 @@ vector<int> Day19::actualRelativeCenter(int scannerNum){
         }
     }
 
-    return {1,2,3};
+    return {0,0,0};
 }
 
+bool Day19::checkIfScannerAdded(int scannerNum){
+    for (int i = 0; i < successfulScanners.size(); i++){
+        if (successfulScanners.at(i) == scannerNum) return true;
+    }
+    return false;
+}
+
+bool Day19::checkIfAllScannersAdded() {
+    if (successfulScanners.size() == coordinates.size()) return true;
+    return false;
+}
+
+vector<int> Day19::findOrientationAndRelPosWithListOfCoor(vector<vector<int>> scanner, int scannerNum){
+
+    for (int i = 0; i < 48; i++){ // try all the orientations
+        vector<vector<int>> newScannerAdj = adjustScannerOrientation(scanner, i);
+        int same = numOfSameRelativeDistances(newScannerAdj, allCoorRelTo0);
+        if (same > 11){
+            vector<int> coord = giveCoorDifferencesBasedOnRelativeDistance(newScannerAdj, allCoorRelTo0);
+            coord.push_back(scannerNum);
+            //coord.push_back(overlappingScanner);
+            coord.push_back(i); // orientation
+
+            scannerRelativePosToOtherScanner.push_back(coord);
+            return coord;
+            break;
+        }
+    }
+    return {0};
+
+}
+
+int Day19::addAllBeacons(){
+    //add beacon 0
+    int numScanners = coordinates.size();
+    for (int i = 0; i < coordinates.at(0).size(); i++){
+        addBeacon(  coordinates.at(0).at(i) );
+    }
+    successfulScanners.push_back(0);
+    int i = 0;
+    while (!checkIfAllScannersAdded()){
+        i++;
+        i = i % numScanners;
+        if (checkIfScannerAdded(i)) continue; // if it's already there, then keep going
+        vector<vector<int>> currScanner = coordinates.at(i);
+        vector<int> coors = findOrientationAndRelPosWithListOfCoor(currScanner, i);
+        if (coors.size() > 1){
+            cout << "before adjustment" << endl;
+            printScannerInOrder(currScanner);
+
+            currScanner = adjustScannerOrientation(currScanner, coors.at(4));
+            cout << endl << "orientation adjustment " << endl;
+            printScannerInOrder(currScanner);
+
+            currScanner = adjustPosition(currScanner, coors.at(0)*-1, coors.at(1)*-1, coors.at(2)*-1 );
+            cout << endl << "after pos adjustment " << endl;
+            printScannerInOrder(currScanner);
+
+            for (int j = 0; j < currScanner.size(); j++){
+                addBeacon(currScanner.at(j));
+            }
+            successfulScanners.push_back(i);
+            cout << "added scanner #" << i << endl;
+            cout << allCoorRelTo0.size() << endl;
+        }
+
+        //        vector<int> currScannerPosAndInfo = scannerRelativePosToOtherScanner.at(i);
+
+
+    }
+
+
+    //try adding beacon 1 after adjusting -- mark the vector if we do it successfully
+    //continue, keep doing this until we get all of the beacons added.
+    //
+    return allCoorRelTo0.size();
+}
+
+
 int Day19::solve(){
-    vector<vector<int>> scanner1 = coordinates.at(1);
 
-for (int i = 1; i < 5; i++){
-//        cout << endl << endl << i << ":" <<endl;
-        actualRelativeCenter(i);
-    }
 
-    for (int i = 0; i < scannerRelativePosToOtherScanner.size(); i++){
-        cout << "Scanner "<< scannerRelativePosToOtherScanner[i][3] << " relative to " << scannerRelativePosToOtherScanner[i][4] << endl;
-        cout << scannerRelativePosToOtherScanner[i][0] << " " <<
-                scannerRelativePosToOtherScanner[i][1] << " " <<
-                scannerRelativePosToOtherScanner[i][2] << " " << endl;
-
-//        if (scannerRelativePosToOtherScanner[i][4] == 0)
-//            vector<int> coor {scannerRelativePosToOtherScanner[i][0],
-//                              scannerRelativePosToOtherScanner[i][1],
-//                              scannerRelativePosToOtherScanner[i][2]};
-//            scannerRealtivePosToScanner0.push_back(coor);
-//        }
-    }
-    //findRelativeCenter(scanner1);
-
-//    for (int k = 0; k < 24; k++){
-//        scanner1 = adjustScannerOrientation(scanner1, k);
-//        for (int i = 0; i < scanner0.size(); i++){
-//            for (int j = 0; j < scanner1.size(); j++){
-//                vector<int> coor = diffInCoor(scanner1.at(j), scanner0.at(i));
-//                cout << coor[0] << " " << coor[1] << " " << coor[2] << " " << endl;
-//            }
-//        }
-//    }
-
-//    cout << "trying 4 and other" << endl;
-//    for (int k = 0; k < 5; k++){
-//        for (int i = 0; i < 24; i++){
-//            vector<vector<int>> newScannerAdj = adjustScannerOrientation(coordinates.at(3), i);
-//            numOfSameRelativeDistances(coordinates.at(k), newScannerAdj);
-//        }
+    cout << addAllBeacons() << endl;
+//    vector<vector<int>> scanner1 = coordinates.at(1);
+//
+//    for (int i = 0; i < 48; i++){
+//        vector<int> coor = changeOrientationOfCoor({1,2,3}, i);
+//        cout << i << ": "<< coor[0] << "," << coor[1] << "," << coor[2] << "," << endl;
 //    }
 //
-//    cout << "here" << endl;
-//#endif
+//    for (int i = 1; i < 5; i++){
+//        actualRelativeCenter(i);
+//    }
+//
+//    for (int i = 0; i < scannerRelativePosToOtherScanner.size(); i++) {
+//        cout << "Scanner " << scannerRelativePosToOtherScanner[i][3] << " relative to "
+//             << scannerRelativePosToOtherScanner[i][4] << " orientation of " << scannerRelativePosToOtherScanner[i][5]
+//             << endl;
+//        cout << scannerRelativePosToOtherScanner[i][0] << " " <<
+//             scannerRelativePosToOtherScanner[i][1] << " " <<
+//             scannerRelativePosToOtherScanner[i][2] << " " << endl;
+//
+//    }
 
     return 19;
 }

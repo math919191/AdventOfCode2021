@@ -19,8 +19,10 @@ private:
     vector<vector<int>> allCoorRelTo0;
     vector<vector<int>> scanner0;
     vector<vector<int>> scannerRelativePosToOtherScanner;
-    // x y z scannerNum relativeScannerNum
+    // x y z scannerNum relativeScannerNum orientation
     vector<vector<int>> scannerRealtivePosToScanner0;
+
+    vector<int> successfulScanners;
 
     vector<vector<int>> rotations = {
             {1,1,1},
@@ -120,6 +122,16 @@ public:
     vector<int> changeOrientationOfCoor(vector<int> coor, int whichIteration);
 
     bool addBeacon(vector<int> beacon);
+
+    int addAllBeacons();
+
+    bool checkIfScannerAdded(int scannerNum);
+
+    bool checkIfAllScannersAdded();
+
+    vector<vector<int>> findOrientationAndRelPosWithListOfCoor(vector<vector<int>> scanner);
+
+    vector<int> findOrientationAndRelPosWithListOfCoor(vector<vector<int>> scanner, int scannerNum);
 };
 
 
