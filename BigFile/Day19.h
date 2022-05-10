@@ -16,11 +16,32 @@ using namespace std;
 class Day19 {
 private:
     vector<vector<vector<int>>> coordinates;
+    vector<vector<int>> allCoorRelTo0;
     vector<vector<int>> scanner0;
     vector<vector<int>> scannerRelativePosToOtherScanner;
     // x y z scannerNum relativeScannerNum
     vector<vector<int>> scannerRealtivePosToScanner0;
 
+    vector<vector<int>> rotations = {
+            {1,1,1},
+            {-1,1,1},
+            {1,-1,1},
+            {1,1,-1},
+            {-1,-1,1},
+            {1,-1,-1},
+            {-1,1,-1},
+            {-1,-1,-1},
+    };
+
+    vector<vector<char>> switches = {
+            {0,1,2},
+            {1,2,0},
+            {2,0,1},
+            {0,2,1},
+            {1,0,2},
+            {2,1,0},
+
+    };
 
     //static vector<vector<vector<bool>>> map;
     //static bool map[1900][1999][1999];
@@ -78,7 +99,7 @@ public:
 
     vector<int> changeSingleCoorOrientation(vector<int> coor, int whichIteration);
 
-    vector<vector<int>> adjustOrientation(vector<vector<int>> scanner, int whatIter);
+    vector<vector<int>> adjustScannerOrientation(vector<vector<int>> scanner, int whatIter);
 
     int findNumOverlappingBeacons(vector<vector<int>> scanner1, vector<vector<int>> scanner2);
 
@@ -95,6 +116,10 @@ public:
     vector<int> actualRelativeCenter(int scannerNum);
 
     vector<int> giveCoorDifferencesBasedOnRelativeDistance(vector<vector<int>> scanner1, vector<vector<int>> scanner2);
+
+    vector<int> changeOrientationOfCoor(vector<int> coor, int whichIteration);
+
+    bool addBeacon(vector<int> beacon);
 };
 
 
