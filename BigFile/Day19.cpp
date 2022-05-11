@@ -410,7 +410,7 @@ int Day19::addAllBeacons(){
     int i = 0;
     int numberOfTimesThrough = 0;
     while (!checkIfAllScannersAdded()){
-        cout << i << endl;
+        //cout << i << endl;
 //        i++;
 //        i = i % numScanners;
         if (numberOfTimesThrough < orderOfScannerstoBeAdded.size()){
@@ -432,10 +432,12 @@ int Day19::addAllBeacons(){
             vector<vector<int>> currScanner = coordinates.at(i);
             vector<int> coors = findOrientationAndRelPosWithListOfCoor(currScanner, i);
             if (coors.size() > 1){
-
                 currScanner = adjustScannerOrientation(currScanner, coors.at(4));
 
                 currScanner = adjustPosition(currScanner, coors.at(0)*-1, coors.at(1)*-1, coors.at(2)*-1 );
+                vector<int> distanceAway = {coors[0]*-1, coors[1]*-1,coors[2]*-1 };
+//                masterCoorsList.push_back(changeOrientationOfCoor(distanceAway, coors[4]));
+                masterCoorsList.push_back(distanceAway);
 
                 for (int j = 0; j < currScanner.size(); j++){
                     addBeacon(currScanner.at(j));
@@ -529,10 +531,41 @@ int Day19::countNonDuplicates(){
     return nonDuplicates.size();
 }
 
+long long giveManhattan(vector<int> coor1, vector<int> coor2 ){
+    long long total = 0;
+    for (int i = 0; i < 3; i++){
+        total += abs(coor1[i] - coor2[i]);
+    }
+    return total;
+
+}
+
 int Day19::solve(){
 
+    //10562 too low part 2
+    //12000 too high part 2
 
-    //cout << addAllBeacons() << endl;
+//    cout << addAllBeacons() << endl;
+//
+//
+//    for (int i = 0; i < masterCoorsList.size(); i++){
+//        cout << "{" << masterCoorsList[i][0] << "," << masterCoorsList[i][1] << "," << masterCoorsList[i][2] << "}"<<endl;
+//    }
+//
+    //allRel = allRelSamp;
+    long long maxManhattan = 0;
+    for (int i = 0; i < allRel.size(); i++){
+        for (int j = 0; j < allRel.size(); j++){
+            long long currMan = giveManhattan(allRel.at(j), allRel.at(i));
+            if ( currMan > maxManhattan){
+                maxManhattan = currMan;
+                cout << endl << maxManhattan << endl;
+                cout << allRel[i][0] << " " << allRel[i][1]  << " " << allRel[i][2] << endl;
+                cout << allRel[j][0] << " " << allRel[j][1]  << " " << allRel[j][2] << endl;
+            }
+        }
+    }
+    cout << maxManhattan << endl;
 //    vector<vector<int>> scanner1 = coordinates.at(1);
 //
 //    for (int i = 0; i < 48; i++){
@@ -540,19 +573,19 @@ int Day19::solve(){
 //        cout << i << ": "<< coor[0] << "," << coor[1] << "," << coor[2] << "," << endl;
 //    }
 //
-    for (int i = 1; i < coordinates.size(); i++){
-        actualRelativeCenter(i);
-
-
-        cout << "Scanner " << scannerRelativePosToOtherScanner[i][3] << " relative to "
-             << scannerRelativePosToOtherScanner[i][4] << " orientation of " << scannerRelativePosToOtherScanner[i][5]
-             << endl;
-        cout << scannerRelativePosToOtherScanner[i][0] << " " <<
-             scannerRelativePosToOtherScanner[i][1] << " " <<
-             scannerRelativePosToOtherScanner[i][2] << " " << endl;
-
-    }
-    cout << goingThroughGeneratedListOfCoorsAndRelScanner() << endl;
+//    for (int i = 1; i < coordinates.size(); i++){
+//        actualRelativeCenter(i);
+//
+//
+//        cout << "Scanner " << scannerRelativePosToOtherScanner[i][3] << " relative to "
+//             << scannerRelativePosToOtherScanner[i][4] << " orientation of " << scannerRelativePosToOtherScanner[i][5]
+//             << endl;
+//        cout << scannerRelativePosToOtherScanner[i][0] << " " <<
+//             scannerRelativePosToOtherScanner[i][1] << " " <<
+//             scannerRelativePosToOtherScanner[i][2] << " " << endl;
+//
+//    }
+//    cout << goingThroughGeneratedListOfCoorsAndRelScanner() << endl;
 //
 //    for (int i = 0; i < scannerRelativePosToOtherScanner.size(); i++) {
 //        cout << "Scanner " << scannerRelativePosToOtherScanner[i][3] << " relative to "

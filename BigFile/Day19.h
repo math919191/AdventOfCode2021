@@ -19,6 +19,7 @@ private:
     vector<vector<int>> allCoorRelTo0;
     vector<vector<int>> scanner0;
     vector<vector<int>> scannerRelativePosToOtherScanner;
+    vector<vector<int>> masterCoorsList;
     // x y z scannerNum relativeScannerNum orientation
     vector<vector<int>> scannerRealtivePosToScanner0;
 
@@ -45,10 +46,52 @@ private:
 
     };
 
+    vector<vector<int>> allRelSamp {
+            {68,-1246,-43},
+            {-92,-2380,-20},
+            {-20,-1133,1061},
+            {1105,-1205,1229},
+
+    };
+
+    vector<vector<int>> allRel {
+            {0,0,0},
+            {-54,-1205,34},
+            {-1129,-1313,51},
+            {81,-2471,53},
+            {64,-3691,46},
+            {1089,-3554,-18},
+            {-79,-3580,1213},
+            {-1208,-3707,1217},
+            {1162,-3686,1163},
+            {-1183,-4812,1209},
+            {1156,-4793,50},
+            {13,-4801,1255},
+            {-1316,-6106,1274},
+            {18,-6093,99},
+            {-96,-4931,-63},
+            {82,-6059,1187},
+            {1229,-4908,1131},
+            {-1202,-5975,36},
+            {77,-7326,1202},
+            {-1267,-4757,2436},
+            {1242,-3739,2459},
+            {-100,-4762,-1171},
+            {1089,-4924,2450},
+            {-106,-6008,2451},
+            {24,-7241,2345},
+            {-2431,-6016,115},
+            {-40,-5990,-1167},
+            {-76,-7198,3536},
+            {-3677,-6107,47},
+            {-49,-8511,2335}
+    };
+
     //static vector<vector<vector<bool>>> map;
     //static bool map[1900][1999][1999];
 
     vector<int> orderOfScannerstoBeAdded {25,10,23,13,17,20,1,2,4,5,7,9,11,12,15,19,21,22,26,27,29,3,6,16,18,24,28,8,14};
+    //vector<int> orderOfScannerstoBeAdded {1,3,4,2};
     //                                     1 2 3    4  5 6  7 8 9 10 11 13 14 15 16 17 18 19 20 21 222324 25 26 27 28
     //24 => 309
     //28 => 322
