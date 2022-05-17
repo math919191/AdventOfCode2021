@@ -8,6 +8,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/BigFile.dir/Day18.cpp.obj"
   "CMakeFiles/BigFile.dir/Day19.cpp.obj"
   "CMakeFiles/BigFile.dir/Day20.cpp.obj"
+  "CMakeFiles/BigFile.dir/Day23.cpp.obj"
   "CMakeFiles/BigFile.dir/Day25.cpp.obj"
   "CMakeFiles/BigFile.dir/boilerplate.cpp.obj"
   "CMakeFiles/BigFile.dir/main.cpp.obj"

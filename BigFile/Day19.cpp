@@ -544,6 +544,7 @@ int Day19::solve(){
 
     //10562 too low part 2
     //12000 too high part 2
+    //10895 is the answer
 
 //    cout << addAllBeacons() << endl;
 //
