@@ -63,6 +63,20 @@ public:
     bool move(direction dir, int x, int y);
 
     void addEnergy(char amphipod);
+
+    bool checkIfCanMakeItHome(int x, int y);
+
+    bool moveHome(int x, int y);
+
+    bool moveHome2(int x, int y);
+
+    int getHallwayXCoor(int whichHall);
+
+    bool moveToHallway(int x, int y, int whichHall);
+
+    bool checkIfCanMoveToHallway(int x, int y, int whichHall);
+
+    int solveHelper();
 };
 
 

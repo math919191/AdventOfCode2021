@@ -17,27 +17,201 @@ void Day23::printMap(){
     cout << endl;
 }
 
+bool Day23::moveHome(int x, int y){
+    if (!checkIfCanMakeItHome(x,y)) return false;
+
+    char amphipod = map[x][y];
+    int xValRoom = (amphipod - 64) * 2 + 1;
+    if (y == 3){
+        move(UP, x, y);
+        y = y - 1;
+        move(UP, x, y);
+        y = y - 1;
+
+    } else if (y == 2) {
+        move(UP, x, y);
+        y = y - 1;
+
+    }
+
+    int distToRoom = xValRoom - x;
+    if (distToRoom > 0) { // moving to the right
+        for (int i = x; i < xValRoom; i++){
+            move(RIGHT, x, y);
+            x = x + 1;
+        }
+    } else { //moving to the left
+        while (x > xValRoom){
+            move(LEFT, x, y);
+            x = x - 1;
+        }
+//        for (int i = xValRoom; i < x; i++){
+//
+//        }
+    }
+
+    move(DOWN, x, y);
+    y = y + 1;
+    if (y == 2) move(DOWN, x, y);
+    return true;
+
+
+}
+
+bool Day23::moveHome2(int x, int y){
+    char amphipod = map[x][y];
+    int xValRoom = (amphipod - 64) * 2 + 1;
+    map[x][y] = '.';
+    if (map[xValRoom][3] == '.') {
+        map[xValRoom][3] = amphipod;
+    } else {
+        map[xValRoom][2] = amphipod;
+    }
+    return true;
+}
+
+int Day23::getHallwayXCoor(int whichHall){
+    if (whichHall == 1) return 1;
+    if (whichHall == 2) return 2;
+    if (whichHall == 3) return 4;
+    if (whichHall == 4) return 6;
+    if (whichHall == 5) return 8;
+    if (whichHall == 6) return 10;
+    if (whichHall == 7) return 11;
+
+}
+
+bool Day23::checkIfCanMoveToHallway(int x, int y, int whichHall){
+
+    if (y == 3) {
+        if (map[x][2] != '.') return false;
+        if (map[x][1] != '.') return false;
+    } else if (y == 2){
+        if (map[x][1] != '.') return false;
+    }
+    //int xValRoom = (map[x][y] - 64) * 2 + 1;
+    int distToRoom = x - getHallwayXCoor(whichHall);
+    int dist = abs(distToRoom);
+    if (distToRoom < 0) { // moving to the right
+        for (int i = 0; i < dist; i++){
+            if (!checkIfValidMove(RIGHT, x, 1)) return false;
+            x = x + 1;
+        }
+    } else { //moving to the left
+
+        for (int i = 0; i < distToRoom; i++){
+            if (!checkIfValidMove(LEFT, x, 1)) return false;
+            x = x - 1;
+        }
+    }
+    return true;
+
+}
+
+bool Day23::moveToHallway(int x, int y, int whichHall){
+/* //    #############
+//    #12 3 4 5 67#
+//    ###A#B#C#D###
+//      #A#B#C#D#
+//      ######### */
+    if (!checkIfCanMoveToHallway(x, y, whichHall)) return false;
+    //moveToHallway2(x, y, whichHall);
+    //return true;
+    bool keepGoing = true;
+    while (keepGoing){
+        keepGoing = move(UP, x, y);
+        if (keepGoing) y = y - 1;
+    }
+
+    //int xValRoom = (map[x][y] - 64) * 2 + 1;
+    int distToRoom = x - getHallwayXCoor(whichHall);
+    if (distToRoom < 0) { // moving to the right
+        for (int i = x; i < getHallwayXCoor(whichHall); i++){
+            move(RIGHT, x, y);
+            x = x + 1;
+        }
+    } else { //moving to the left
+        for (int i = 0; i < distToRoom; i++){
+            move(LEFT, x, y);
+            x = x - 1;
+        }
+    }
+    return true;
+}
+
+bool Day23::checkIfCanMakeItHome(int x, int y){
+    char amphipod = map[x][y];
+
+    //check if it can get out of the room if it's not in the hall.
+    if (y != 1){
+        if (y == 2){
+            if (map[x][1] != '.') return false;
+        } else if (y == 3) {
+            if (map[x][1] != '.') return false;
+            if (map[x][2] != '.') return false;
+        }
+    }
+
+    //check room is empty
+    // 'A' = 65 (char val) --> (3,2) (3,3) // 65 -> 3  (65 - 64) * 2 + 1
+    int xValRoom = (amphipod - 64) * 2 + 1;
+    if ( (map[xValRoom][3] == '.' || map[xValRoom][3] == amphipod) ){
+        if ((map[xValRoom][2] == '.')){
+            int var = 0;
+        } else {
+            return false;
+        }
+        //the room is empty or only has its buddy
+    } else {
+        return false;
+    }
+
+    //check if it is a straight shot to the room
+    int distToRoom = xValRoom - x;
+    if (distToRoom > 0) { // moving to the right
+        for (int i = 0; i < distToRoom; i++){
+            if (map[x+i+1][1] != '.'){
+                return false;
+            }
+        }
+    } else { //moving to the left
+        for (int i = xValRoom; i < x; i++){
+            if (map[i][1] != '.'){
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
 bool Day23::checkIfValidMove(direction dir, int x, int y){
     if (dir == UP){
-        if (map[x][y-1] == '.'){
+        if (map[x][y-1] != '.'){
+            return false;
+        } else {
             return true;
         }
     } else if (dir == DOWN){
-        if (map[x][y+1] == '.'){
+        if (map[x][y+1] != '.'){
+            return false;
+        } else {
             return true;
         }
     } else if (dir == LEFT){
-        if (map[x-1][y] == '.'){
+        if (map[x-1][y] != '.'){
+            return false;
+        } else {
             return true;
         }
     } else if (dir == RIGHT){
-        if (map[x+1][y] == '.'){
+        char var = map[x+1][y];
+        if (map[x+1][y] != '.'){
+            return false;
+        } else {
             return true;
         }
     }
-    cout << "bad move" << endl;
-    return false;
+    return true;
 }
 
 void Day23::addEnergy(char amphipod){
@@ -46,10 +220,11 @@ void Day23::addEnergy(char amphipod){
 
 bool Day23::move(direction dir, int x, int y){
     char currAmphipod = map[x][y];
-    cout << "curr " << currAmphipod << endl;
-    if (!checkIfValidMove(dir, x, y))  return false;
 
-//    char currAmphipod = map[x][y];
+    if (!checkIfValidMove(dir, x, y)){
+        cout << "error";
+        return false;
+    }
 
     addEnergy(currAmphipod);
 
@@ -64,18 +239,61 @@ bool Day23::move(direction dir, int x, int y){
     } else if (dir == RIGHT){
         map[x+1][y] = currAmphipod;
     }
+
+    //printMap();
     return true;
 }
 
+int Day23::solveHelper(){
+    //for each of the 8 amphipods
+        // it can go to 7 different hallway spots
+        // in any order
+        // and back home
+        // in any order
+    //after 1 amphipod moves to its home or a hallway
+    //any other amphipod can move to its home or a hallway
+    //and any other amphipod can move to its home or a hallway
+    //but it's in any order...
+    // 1 2 3
+    // 1 3 2
+    // 2 1 3
+    // 2 3 1
+    // 3
+    cout << "Starting: " << endl;
+    printMap();
+    cout << "B to hallway " << endl;
+    moveToHallway(7,2,3);  //B to hallway
+    printMap();
+
+    cout << "C To home " << endl;
+    moveHome(5,2); // C to home
+    printMap();
+    moveToHallway(5,3,4); //D to hallway
+    printMap();
+    moveHome(4,1); // B to home
+    printMap();
+    moveHome(3,2); // B to home
+    printMap();
+    moveToHallway(9, 2, 5); // D out
+    printMap();
+    moveToHallway(9, 3, 6); // A out
+    printMap();
+    moveHome(8,1); // D to home
+    printMap();
+    moveHome(6,1); // other D to home
+    printMap();
+    moveHome(10,1); // A to home
+    printMap();
+    cout << energyTotal << endl;
+
+
+    return 0;
+
+}
+
+
 void Day23::solve(){
-
-    printMap();
-    //map[3][2] = 'X';
-    move(UP, 3, 2);
-
-    printMap();
-    move(RIGHT, 3, 1);
-    printMap();
+    solveHelper();
 
 }
 
