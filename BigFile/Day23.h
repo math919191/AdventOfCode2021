@@ -77,6 +77,14 @@ public:
     bool checkIfCanMoveToHallway(int x, int y, int whichHall);
 
     int solveHelper();
+
+    int solveExample();
+
+    void keepTrackSomehow();
+
+    vector<vector<int>> amphipodsWhoAreAllowedToMove();
+
+    void solveMySolution();
 };
 
 

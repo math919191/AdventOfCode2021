@@ -222,7 +222,7 @@ bool Day23::move(direction dir, int x, int y){
     char currAmphipod = map[x][y];
 
     if (!checkIfValidMove(dir, x, y)){
-        cout << "error";
+        //cout << "error";
         return false;
     }
 
@@ -244,7 +244,7 @@ bool Day23::move(direction dir, int x, int y){
     return true;
 }
 
-int Day23::solveHelper(){
+int Day23::solveExample(){
     //for each of the 8 amphipods
         // it can go to 7 different hallway spots
         // in any order
@@ -261,11 +261,8 @@ int Day23::solveHelper(){
     // 3
     cout << "Starting: " << endl;
     printMap();
-    cout << "B to hallway " << endl;
     moveToHallway(7,2,3);  //B to hallway
     printMap();
-
-    cout << "C To home " << endl;
     moveHome(5,2); // C to home
     printMap();
     moveToHallway(5,3,4); //D to hallway
@@ -286,14 +283,115 @@ int Day23::solveHelper(){
     printMap();
     cout << energyTotal << endl;
 
-
     return 0;
 
 }
 
+void Day23::keepTrackSomehow(){
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            char currChar = map[j][i];
+            if (currChar != '.' && currChar != '#'){
+                cout << currChar << " is at " << j << ", " << i << endl;
+            }
+        }
+    }
+}
+
+
+vector<vector<int>> Day23::amphipodsWhoAreAllowedToMove(){
+    vector<vector<int>> possibleSpots;
+
+    //top of room
+    possibleSpots.push_back({2, 3});
+    possibleSpots.push_back({2, 5});
+    possibleSpots.push_back({2, 7});
+    possibleSpots.push_back({2, 9});
+    //bottom of room
+    possibleSpots.push_back({2, 3});
+    possibleSpots.push_back({2, 5});
+    possibleSpots.push_back({2, 7});
+    possibleSpots.push_back({2, 9});
+    //hallway spots
+    possibleSpots.push_back({1, 1});
+    possibleSpots.push_back({1, 2});
+    possibleSpots.push_back({1, 4});
+    possibleSpots.push_back({1, 6});
+    possibleSpots.push_back({1, 8});
+    possibleSpots.push_back({1, 10});
+    possibleSpots.push_back({1, 11});
+    return possibleSpots;
+}
+
+void Day23::solveMySolution(){
+    //get c in the hallway -- probably @ 6
+    moveToHallway(9,2,6);
+    printMap();
+    cout << energyTotal << endl;
+
+    //get a in the hallway -- probably @ 1
+    moveToHallway(9,3,1);
+    printMap();
+    cout << energyTotal << endl;
+
+    //get d home (from row 2)
+    moveHome(5,2);
+    printMap();
+    cout << energyTotal << endl;
+
+    //get b in the hallway -- probably @ 3
+    moveToHallway(7,2,3);
+    printMap();
+    cout << energyTotal << endl;
+
+    //get d home (from row 3)
+    moveHome(7,3);
+    printMap();
+    cout << energyTotal << endl;
+
+
+    //get other c home (from row 2)
+    moveHome(5,3);
+    printMap();
+    cout << energyTotal << endl;
+
+    //get c home (from hallway)
+    moveHome(10,1);
+    printMap();
+    cout << energyTotal << endl;
+
+    //get b home from hallway
+    moveHome(4,1);
+    printMap();
+    cout << energyTotal << endl;
+
+    //get a in hallway (from row 1 probably @ 2)
+    moveToHallway(3,2,2);
+    printMap();
+    cout << energyTotal << endl;
+
+    //move b home from row 1
+    moveHome(3,3);
+    printMap();
+    cout << energyTotal << endl;
+
+    //move a home from hallway 2
+    moveHome(2,1);
+    printMap();
+    cout << energyTotal << endl;
+
+    //move a home from hallway 1
+    moveHome(1,1);
+    printMap();
+    cout << energyTotal << endl;
+    //13000 is too low
+    //13338 is too high
+}
 
 void Day23::solve(){
-    solveHelper();
+    //solveHelper();
+    keepTrackSomehow();
+    solveMySolution();
 
 }
 
