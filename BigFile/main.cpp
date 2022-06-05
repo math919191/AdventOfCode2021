@@ -10,7 +10,8 @@
 //#include "Day14.h"
 //#include "Day19.h"
 //#include "Day25.h"
-#include "Day23.h"
+//#include "Day23.h"
+#include "Day15_2.h"
 
 
 using namespace std;
@@ -38,7 +39,7 @@ int main(int argc, char* argv[]) {
         input.push_back(line);
     }
 
-    Day23 puzzle(input);
+    Day15_2 puzzle(input);
     puzzle.solve();
     //puzzle.part2();
     return 0;

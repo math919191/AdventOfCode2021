@@ -176,6 +176,30 @@ Day15.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day15.cpp.s
 .PHONY : Day15.cpp.s
 
+Day15_2.obj: Day15_2.cpp.obj
+.PHONY : Day15_2.obj
+
+# target to build an object file
+Day15_2.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day15_2.cpp.obj
+.PHONY : Day15_2.cpp.obj
+
+Day15_2.i: Day15_2.cpp.i
+.PHONY : Day15_2.i
+
+# target to preprocess a source file
+Day15_2.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day15_2.cpp.i
+.PHONY : Day15_2.cpp.i
+
+Day15_2.s: Day15_2.cpp.s
+.PHONY : Day15_2.s
+
+# target to generate assembly for a file
+Day15_2.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\BigFile.dir\build.make CMakeFiles/BigFile.dir/Day15_2.cpp.s
+.PHONY : Day15_2.cpp.s
+
 Day16.obj: Day16.cpp.obj
 .PHONY : Day16.obj
 
@@ -383,6 +407,9 @@ help:
 	@echo ... Day15.obj
 	@echo ... Day15.i
 	@echo ... Day15.s
+	@echo ... Day15_2.obj
+	@echo ... Day15_2.i
+	@echo ... Day15_2.s
 	@echo ... Day16.obj
 	@echo ... Day16.i
 	@echo ... Day16.s

@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day23.cpp
-Day23.h
-C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day23.h
+C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day15_2.cpp
+Day15_2.h
+C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day15_2.h
 
-C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day23.h
+C:/Users/rebek/AdventOfCode/AdventOfCode2021/BigFile/Day15_2.h
 iostream
 -
 fstream
@@ -22,7 +22,5 @@ string
 vector
 -
 cmath
--
-map
 -
 

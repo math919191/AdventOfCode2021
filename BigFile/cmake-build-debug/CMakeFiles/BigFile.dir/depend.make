@@ -7,6 +7,9 @@ CMakeFiles/BigFile.dir/Day14.cpp.obj: \
 CMakeFiles/BigFile.dir/Day15.cpp.obj: \
  ../Day15.cpp \
  ../Day15.h
+CMakeFiles/BigFile.dir/Day15_2.cpp.obj: \
+ ../Day15_2.cpp \
+ ../Day15_2.h
 CMakeFiles/BigFile.dir/Day16.cpp.obj: \
  ../Day16.cpp \
  ../Day16.h
@@ -29,5 +32,5 @@ CMakeFiles/BigFile.dir/boilerplate.cpp.obj: \
  ../boilerplate.cpp \
  ../boilerplate.h
 CMakeFiles/BigFile.dir/main.cpp.obj: \
- ../Day23.h \
+ ../Day15_2.h \
  ../main.cpp

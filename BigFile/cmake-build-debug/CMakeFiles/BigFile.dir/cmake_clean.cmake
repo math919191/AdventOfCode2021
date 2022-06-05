@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "BigFile.pdb"
   "CMakeFiles/BigFile.dir/Day14.cpp.obj"
   "CMakeFiles/BigFile.dir/Day15.cpp.obj"
+  "CMakeFiles/BigFile.dir/Day15_2.cpp.obj"
   "CMakeFiles/BigFile.dir/Day16.cpp.obj"
   "CMakeFiles/BigFile.dir/Day18.cpp.obj"
   "CMakeFiles/BigFile.dir/Day19.cpp.obj"
